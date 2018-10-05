@@ -1,0 +1,31 @@
+{
+  "name": "node-red-master",
+  "version": "1.0.0",
+  "description": "Test environment for developing Node-RED flows",
+  "main": "node_modules/node-red/red.js",
+  "keywords": [
+    "node-red"
+  ],
+  "author": "Julian Knight",
+  "license": "MIT",
+
+  "scripts": {
+    "start": "node node_modules/node-red/red.js --userDir ./data",
+    "update": "npm run update-master",
+    "check": "npm run check-master",
+    "check-master": "npm outdated",
+    "update-master": "npm install --unsafe-perm node-red node-red-admin",
+    "check-data": "cd data && npm run check-data",
+    "update-data": "cd data && npm run update-data",
+    "admin": "node node_modules/node-red-admin/node-red-admin.js",
+
+    "adminui": "start http://localhost:1880/red/",
+    "ui": "start http://localhost:1880/ui/",
+    "log": "sudo journalctl -u nrlive -f -n 0 -o cat"
+  },
+
+  "dependencies": {
+    "node-red": "*",
+    "node-red-admin": "*"
+  }
+}
