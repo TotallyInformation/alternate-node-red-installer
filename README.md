@@ -48,6 +48,16 @@ Have different versions of Node-RED running in parallel. All really easy.
 
 This works on any platform that Node-RED will run on.
 
+## Installing
+
+1. Make sure that you have Node.JS correctly installed. Check that you can run it manually from the command line with `node --version && npm --version`.
+2. Copy the [template](./template/) folder and the [`.template/data`](data/) subfolder to any convenient location on the device where you want Node-RED to run. You should probably give the resulting folder a more meaningful name than `template`. The contents of that folder will become the master project folder for Node-RED.
+3. From a command line, navigate to the folder created in step 2 and run `npm run update`. This will install Node-RED and the admin tool.
+4. Run Node-RED manually by issuing the command `npm start`. You will see the Node-RED log output in the terminal and it should start correctly.
+
+These instructions should work on any platform supported by Node.JS.
+
+
 ## Starting Node-RED
 
 When using this method, uou can start Node-RED manually from either the master or the data folder by simply typing:

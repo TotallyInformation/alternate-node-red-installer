@@ -8,24 +8,34 @@
   ],
   "author": "Julian Knight",
   "license": "MIT",
-
   "scripts": {
     "start": "node node_modules/node-red/red.js --userDir ./data",
+    "admin": "node node_modules/node-red-admin/node-red-admin.js",
+
     "update": "npm run update-master",
     "check": "npm run check-master",
     "check-master": "npm outdated",
-    "update-master": "npm install --unsafe-perm node-red node-red-admin",
+    "update-master": "npm install --unsafe-perm",
     "check-data": "cd data && npm run check-data",
     "update-data": "cd data && npm run update-data",
-    "admin": "node node_modules/node-red-admin/node-red-admin.js",
+
+    "restart": "sudo systemctl restart node-red",
+    "log": "sudo journalctl -u node-red -f -n 0 -o cat",
 
     "adminui": "start http://localhost:1880/red/",
     "ui": "start http://localhost:1880/ui/",
-    "log": "sudo journalctl -u nrlive -f -n 0 -o cat"
+
+    "patch": "npm version patch -m \"Patch version bump to %s\" ",
+    "minor": "npm version minor -m \"Minor version bump to %s\" ",
+    "major": "npm version major -m \"Major version bump to %s\"",
+
+    "postinstall": "node ./system/postinstall.js"
   },
 
   "dependencies": {
     "node-red": "*",
     "node-red-admin": "*"
-  }
+  },
+
+  "engines" : { "node" : ">=8" }
 }
