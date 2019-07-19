@@ -71,6 +71,15 @@ Have different versions of Node-RED running in parallel. All really easy.
 
 This works on any platform that Node-RED will run on.
 
+## The advamtages
+
+The advantages of this approach I believe are:
+
+- You can have as many different versions of Node-RED installed as you like making it easy to compare behaviours.
+- Everything is in one place which makes backup and restore (including a known, working version of Node-RED itself) really simple.
+- Everything is in a place that you have chosen. No wasted time hunting for folders in weird places.
+- Users don't need admin rights to install an instance of Node-RED.
+
 ## Starting Node-RED
 
 When using this method, uou can start Node-RED manually from either the master or the data folder by simply typing:
