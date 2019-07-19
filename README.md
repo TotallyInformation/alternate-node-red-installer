@@ -1,17 +1,41 @@
 # alternate-node-red-installer
-An alternative installer for Node-RED. Avoids global installs, no admin rights required.
+An alternative installer for Node-RED. Avoids global installs, no admin rights required for new Node-RED instances.
 
-**WARNING**: THIS IS JUST SOME NOTES RIGHT NOW. By all means use them to do your own custom install of Node-RED.
-The scripts will be along as soon as I can make them. The `templates` folder shows you the folder structure and
-the two `package.json` files that you need.
+> This solution is particularly suited for development environments and anywhere that you don't want to install global NodeJS scripts. Also when you need to have different versions of Node-RED running in parallel.
 
-> This solution is particularly suited for development environments and anywhere that you don't want to install global NodeJS scripts. Also when you need to have different versions of Node-RED running in parallel
+## Getting Started
+
+1. Make sure that you have Node.JS correctly installed. Check that you can run it manually from the command line with `node --version && npm --version`.
+2. Make sure that Node.js is at least at version 8.16.0 (LTS) or above.
+3. For ease of use, install this package globally with `npm install -g alternate-node-red-installer`. You may need to use a command line with elevated rights (`sudo` on Linux).
+
+Now, from any command line, you should be able to run the following:
+
+```
+alternate-node-red-installer -f <root folder name>
+```
+
+Where <root folder name>` is a relative or absolute folder path that you want to be the root of your new Node-RED installation.
+
+Example (for Mac, Linux or Windows PowerShell):
+
+```
+alternate-node-red-installer -f ~/nrtest
+```
+
+Once the install has completed (it may take some time), you can navigate to the data sub-folder and work with Node-RED as normal (e.g. `cd ~/nrtest/data`).
+
+You may wish to adjust the `settings.js` file and install any required Nodes at this point.
+
+Run `npm run` to see the run commands available for your convenience. They are detailed in the README.md file installed in the data subfolder.
+
+These instructions should work on any platform supported by Node.JS.
 
 ## Introduction
 
 Node-RED is a superb, flow-based development and prototyping tool written by IBM to showcase their IoT experience.
 It was later gifted to the JavaScript Foundation. It is entirely JavaScript based thanks to NodeJS and a number
-of other great libraries such as D3 and JQuery.
+of other great libraries such as D3, ExpressJS and JQuery.
 
 I've used it now for a few years to create a custom home automation system and was impressed enough to start trying
 to give back to the community.
@@ -35,11 +59,10 @@ normally since you don't, of course, get any hand-holding to set it up. And so t
 The concept is really very simple.
 
 * Create a folder in some convenient location.
-* Use the `npm` package manager to install node-red (and node-red-admin if you like) into that folder. `npm install --unsafe-perm node-red node-red-admin`
-* Create a sub-folder as your `userDir` - the place all
-of the nodes and your flows and other information is put.
-* Create startup and update scripts both for the master folder
-and the userDir folder using the script facility of npm. You will find examples of these in the `templates` folder of this repository.
+* Use the `npm` package manager to install node-red (and node-red-admin if you like) into that folder. `npm install --unsafe-perm --production node-red node-red-admin`
+* Create a sub-folder as your `userDir` - the place all of the nodes and your flows and other information is put.
+* Create startup and update scripts both for the master folder and the userDir folder using the script facility of npm.
+  You will find examples of these in the `templates` folder of this repository.
 
 That's it.
 
@@ -47,16 +70,6 @@ Having a script to do this means that you can install Node-RED anywhere you like
 Have different versions of Node-RED running in parallel. All really easy.
 
 This works on any platform that Node-RED will run on.
-
-## Installing
-
-1. Make sure that you have Node.JS correctly installed. Check that you can run it manually from the command line with `node --version && npm --version`.
-2. Copy the [template](./template/) folder and the [`.template/data`](data/) subfolder to any convenient location on the device where you want Node-RED to run. You should probably give the resulting folder a more meaningful name than `template`. The contents of that folder will become the master project folder for Node-RED.
-3. From a command line, navigate to the folder created in step 2 and run `npm run update`. This will install Node-RED and the admin tool.
-4. Run Node-RED manually by issuing the command `npm start`. You will see the Node-RED log output in the terminal and it should start correctly.
-
-These instructions should work on any platform supported by Node.JS.
-
 
 ## Starting Node-RED
 
@@ -89,11 +102,4 @@ If you lose track of the script names, simply run `npm run` to get a list.
 
 ## Prerequisites
 
-* NodeJS. v4 may be enough but really v8 or above is more sensible.
-
-## Installation
-
-```
-> cd <parent-folder>
-parent-folder>
-```
+* NodeJS. v8.16.0 (LTS) is the minimum supported version.

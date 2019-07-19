@@ -1,6 +1,6 @@
 {
   "name": "alternate-node-red-installer",
-  "version": "0.0.5-alpha1",
+  "version": "1.0.0",
   "description": "An alternative installer for Node-RED. Avoids global installs, no admin rights required.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/TotallyInformation/alternate-node-red-installer.git"
   },
-  "keywords": [],
+  "keywords": ["node-red"],
   "author": {
     "name": "Julian Knight",
     "url": "https://github.com/TotallyInformation"
