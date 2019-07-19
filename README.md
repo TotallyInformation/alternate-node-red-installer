@@ -109,6 +109,18 @@ Each of the two package.json files also has a simple `check` and `update` run sc
 
 If you lose track of the script names, simply run `npm run` to get a list.
 
+## To Do
+
+These would be interesting extensions. I might one-day get to doing them.
+
+* Create a post-install script that:
+   * Tweaks the template systemd service definition
+   * Creates a Windows scheduler template allowing Node-RED to be run as a service on Windows 10
+* Create a script for Linux that installs the systemd service definition
+* Create a sdript for Windows that installs Node-RED as a Windows Service
+* Allow a configuration file to install required Nodes and change `settings.js`
+* Allow settings overrides to be merged with the master settings.js that is copied from the Node-RED package - this would allow for changes to the master while keeping your custom settings. This is a potential issue with the normal installation when the settings.js file changes.
+
 ## Prerequisites
 
 * NodeJS. v8.16.0 (LTS) is the minimum supported version.
