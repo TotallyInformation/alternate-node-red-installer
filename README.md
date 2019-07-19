@@ -31,6 +31,24 @@ Run `npm run` to see the run commands available for your convenience. They are d
 
 These instructions should work on any platform supported by Node.JS.
 
+## Table of Contents
+
+<!-- TOC -->
+
+* [alternate-node-red-installer](#alternate-node-red-installer)
+  * [Getting Started](#Getting-Started)
+  * [Table of Contents](#Table-of-Contents)
+  * [Introduction](#Introduction)
+  * [The issue](#The-issue)
+  * [The solution](#The-solution)
+  * [The advamtages](#The-advamtages)
+  * [Starting Node-RED](#Starting-Node-RED)
+  * [Updating](#Updating)
+  * [To Do](#To-Do)
+  * [Prerequisites](#Prerequisites)
+
+<!-- /TOC -->
+
 ## Introduction
 
 Node-RED is a superb, flow-based development and prototyping tool written by IBM to showcase their IoT experience.
