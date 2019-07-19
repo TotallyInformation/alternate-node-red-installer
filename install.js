@@ -6,6 +6,16 @@
  *
  * Author: Julian Knight (Totally Information), Jan. 2019
  * License: MIT
+ *
+ * Process Outline:
+ *   - Get start folder (passed as param else requested via command line)
+ *   - Create start folder & data sub-folder
+ *   - cd start folder
+ *   - npm init (better to copy package.json from a template)
+ *   - npm install node-red
+ *   - copy template data folder to data
+ *   - copy ./node_modules/node-red/settings.js to ./data/settings.js
+ * -- Job Done! --
  */
 
 const fs = require('fs')
@@ -34,7 +44,7 @@ console.warn("  Please see the README.md file for manual installation.\n")
 // Download latest archive from GitHub to temp folder
 // https://github.com/TotallyInformation/alternate-node-red-installer/archive/master.zip
 const dest  = './alternate-node-red-installer.zip'
-const url = 'https://codeload.github.com/TotallyInformation/alternate-node-red-installer/archive/master.zip'
+const url = 'https://codeload.github.com/TotallyInformation/alternate-node-red-installer/zip/master'
 download(url, dest, function(){
     console.log('done?')
 })

@@ -1,0 +1,43 @@
+{
+  "name": "alternate-node-red-installer",
+  "version": "0.0.5-alpha1",
+  "description": "An alternative installer for Node-RED. Avoids global installs, no admin rights required.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "boxen": "^4.1.0",
+    "chalk": "^2.4.2",
+    "fs-extra": "^8.1.0",
+    "ora": "^3.4.0",
+    "yargs": "^13.3.0"
+  },
+  "main": "bin/install-node-red.js",
+  "bin": {
+    "alternate-node-red-installer": "./bin/install-node-red.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TotallyInformation/alternate-node-red-installer.git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Julian Knight",
+    "url": "https://github.com/TotallyInformation"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TotallyInformation/alternate-node-red-installer/issues"
+  },
+  "homepage": "https://github.com/TotallyInformation/alternate-node-red-installer#readme",
+  "engines": {
+    "node": ">=8.16"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "maintained node versions",
+    "last 2 versions",
+    "not dead",
+    "not ie < 11"
+  ]
+}

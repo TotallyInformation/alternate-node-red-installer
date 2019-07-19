@@ -1,0 +1,52 @@
+{
+  "name": "node-red-master",
+  "version": "1.0.0",
+  "description": "Test environment for developing Node-RED flows",
+  "main": "node_modules/node-red/red.js",
+  "keywords": [
+    "node-red"
+  ],
+  "author": "Julian Knight",
+  "license": "MIT",
+  "scripts": {
+    "start": "node node_modules/node-red/red.js --userDir ./data",
+    "admin": "node node_modules/node-red-admin/node-red-admin.js",
+    "inspect": "node --inspect node_modules/node-red/red.js --userDir ./data",
+
+    "update": "npm run update-master",
+    "check": "npm run check-master",
+    "check-master": "npm outdated",
+    "update-master": "npm install --production --unsafe-perm",
+    "check-data": "cd data && npm run check-data",
+    "update-data": "cd data && npm run update-data",
+
+    "restart": "sudo systemctl restart node-red",
+    "log": "sudo journalctl -u node-red -f -n 0 -o cat",
+
+    "adminui": "start http://localhost:1880/red/",
+    "ui": "start http://localhost:1880/ui/",
+
+    "patch": "npm version patch -m \"Patch version bump to %s\" ",
+    "minor": "npm version minor -m \"Minor version bump to %s\" ",
+    "major": "npm version major -m \"Major version bump to %s\"",
+
+    "postinstall": "node ./system/postinstall.js",
+
+    "win-tag": "git tag -a v%npm_package_version% -m \"Release v%npm_package_version%\"; git push origin --tags",
+    "tag": "git tag -a v$npm_package_version -m \"Release v$npm_package_version\" && git push origin --tags"
+  },
+
+  "dependencies": {
+    "node-red": "*",
+    "node-red-admin": "*"
+  },
+
+  "engines" : { "node" : ">=8.16.0" },
+  "browserslist": [
+    "> 0.5%",
+    "maintained node versions",
+    "last 2 versions",
+    "not dead",
+    "not ie < 11"
+  ]
+}

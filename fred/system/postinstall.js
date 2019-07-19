@@ -11,6 +11,9 @@
  * License: MIT
  */
 
+/** DONT WANT TO PROCESS THIS FOR NOW - NOT READY */
+if (true === false) {
+
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
@@ -38,8 +41,8 @@ function finish() {
     process.exit(0)
 }
 
-const version = require('../package.json').version
-const validEngines = require('../package.json').engines
+const version = '' //require('../package').version
+const validEngines = '' // require('../package').engines
 
 const templatePath = path.posix.resolve(__dirname, '..')
 
@@ -160,3 +163,4 @@ if ( os.platform() !== 'linux' ) {
 }
 
 //EOF
+}
