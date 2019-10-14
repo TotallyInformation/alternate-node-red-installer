@@ -1,6 +1,6 @@
 {
   "name": "alternate-node-red-installer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An alternative installer for Node-RED. Avoids global installs, no admin rights required.",
   "scripts": {
     "patch": "npm version patch -m \"Patch version bump to %s\" ",
@@ -14,8 +14,8 @@
     "boxen": "^4.1.0",
     "chalk": "^2.4.2",
     "fs-extra": "^8.1.0",
-    "ora": "^3.4.0",
-    "yargs": "^13.3.0"
+    "ora": "^4.0.2",
+    "yargs": "^14.2.0"
   },
   "main": "bin/install-node-red.js",
   "bin": {
