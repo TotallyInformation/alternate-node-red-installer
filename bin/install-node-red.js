@@ -33,6 +33,11 @@ const exec = util.promisify(require('child_process').exec)
 const tilib = require('../tilib')
 const ora = require('ora') // console spinner
 
+/** Parameters from command line
+ * @type {Object} options
+ * @property {string} [folder] - Root folder that will contain the Node-RED installation.
+ * @property {boolean} [no-color] - Turn off ANSI color output.
+ */
 const options = yargs
     .usage('Usage: -f <root-folder-name>')
     .option('f', {
@@ -70,10 +75,11 @@ var msg = chalk`{cyan.bold.underline Alternate Installer for Node-RED}
 
 `
 
-/**  Create start folder & data sub-folder */
+/**  Create start (root) folder */
 async function ensureFolderExists() {
-    const gotDir = await fs.ensureDir(folder)
-    if (gotDir) msg += chalk`{green Creating Root Folder: ${gotDir} }\n`
+    const gotDir =  await fs.ensureDir(folder)
+    // @ts-ignore
+    if (gotDir === true) msg += chalk`{green Creating Root Folder: ${gotDir} }\n`
     else msg += chalk`{blue Root folder already exists}\n`
 }
 
@@ -117,7 +123,7 @@ async function installNodeRed(pkgFolder) {
     }
 }
 
-/**  copy template data folder to data */
+/**  copy template data folder to data - creates folder if not exists - this is the userDir folder */
 async function copyDataTemplate() {
     try {
         await fs.copy(
@@ -151,6 +157,23 @@ async function copySystemTemplate() {
     }
 }
 
+/**  copy template bin folder to root/bin - creates folder if not exists - holds NR restart script */
+async function copyRootBinTemplate() {
+    try {
+        await fs.copy(
+            path.join(templatesFolder, 'rootBin'),
+            path.join(folder, 'bin'),
+            {
+                'overwrite': false,
+                'errorOnExist': true,
+            }
+        )
+        msg += chalk`{green Copied rootBin folder from templates to <root>/bin}\n`
+    } catch(err) {
+        msg += chalk`{red.bold root/bin folder already exists - NOT COPIED}\n`
+    }
+}
+
 /**  copy ./node_modules/node-red/settings.js to ./data/settings.js */
 async function copySettings(pkgFolder) {
     if (pkgFolder === null) pkgFolder = tilib.findPackage('node-red', folder)
@@ -176,6 +199,7 @@ async function copySettings(pkgFolder) {
 
 }
 
+/** Coordinate sync/async functions */
 async function main() {
     await ensureFolderExists()
 
@@ -186,6 +210,7 @@ async function main() {
         installNodeRed(),
         copyDataTemplate(),
         copySystemTemplate(),
+        copyRootBinTemplate(),
     ])
 
     /**  copy ./node_modules/node-red/settings.js to ./data/settings.js */
@@ -196,17 +221,18 @@ async function main() {
     console.log(msgBox)
 }
 
+/** Do it */
 main()
-.then( () => {
-    spinner.stop()
+    .then( () => {
+        spinner.stop()
 
-    console.log(chalk`{cyan.bold NPM COMMAND OUTPUT}`)
-    console.log(out.stdout)
-    console.log(chalk`{magenta.bold NPM COMMAND ERROR OUTPUT}`)
-    console.log(out.stderr)
-})
-.catch( (err) => { // belt & braces
-    console.error(err)
-})
+        console.log(chalk`{cyan.bold NPM COMMAND OUTPUT}`)
+        console.log(out.stdout)
+        console.log(chalk`{magenta.bold NPM COMMAND ERROR OUTPUT}`)
+        console.log(out.stderr)
+    })
+    .catch( (err) => { // belt & braces
+        console.error(err)
+    })
 
 //EOF
