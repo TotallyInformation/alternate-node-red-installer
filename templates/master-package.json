@@ -21,6 +21,7 @@
     "update-data": "cd data && npm run update-data",
 
     "restart": "sudo systemctl restart node-red",
+    "restartnr": "./bin/restartnr.js",
     "log": "sudo journalctl -u node-red -f -n 0 -o cat",
 
     "adminui": "start http://localhost:1880/red/",
@@ -48,5 +49,12 @@
     "last 2 versions",
     "not dead",
     "not ie < 11"
-  ]
+  ],
+  "directories": {
+    "bin": "./bin"
+  },
+  "bin": {
+    "restartnr": "./bin/restartnr.js"
+  }
+
 }
