@@ -10,7 +10,6 @@ https://discourse.nodered.org/t/advice-setting-up-node-red-for-a-class/16650
 - Additional Optional tasks
    - `npm install` in master folder (allows for custom templates to pre-install protected nodes)
    - `npm install` in userDir folder (allows for custom templates to pre-install nodes)
-   - Change `<userDir>/.config.json` to include any nodes installed above.
    - Initialise git in master folder
    - Initialise git in userDir folder
    - 
