@@ -7,7 +7,8 @@ https://discourse.nodered.org/t/advice-setting-up-node-red-for-a-class/16650
 - Add instructions for customised installs.
 - Add an interactive mode.
 - Allow for configuration file.
-- Additional Optional tasks
+- Add --force option (overwrites destination folders)
+- Additional Optional tasks - post install of Node-RED
    - `npm install` in master folder (allows for custom templates to pre-install protected nodes)
    - `npm install` in userDir folder (allows for custom templates to pre-install nodes)
    - Initialise git in master folder

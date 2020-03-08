@@ -64,7 +64,7 @@ const out = {}
 const spinner = ora('Installing').start()
 spinner.color = 'yellow'
 
-/**  Get start folder (passed as param else requested via command line) */
+/** Get start folder (passed as param else requested via command line) */
 const folder = path.resolve(options.folder)
 const templatesFolder = path.join(__dirname, '..', 'templates')
 
@@ -75,36 +75,14 @@ var msg = chalk`{cyan.bold.underline Alternate Installer for Node-RED}
 
 `
 
-/**  Create start (root) folder */
-async function ensureFolderExists() {
-    const gotDir =  await fs.ensureDir(folder)
-    // @ts-ignore
-    if (gotDir === true) msg += chalk`{green Creating Root Folder: ${gotDir} }\n`
-    else msg += chalk`{blue Root folder already exists}\n`
-}
-
-/**  npm init (better to copy package.json from a template) */
-async function copyMasterPackage() {
-    try {
-        await fs.copy(
-            path.join(templatesFolder, 'master-package.json'),
-            path.join(folder, 'package.json'),
-            {
-                'overwrite': false,
-                'errorOnExist': true,
-            }
-        )
-        msg += chalk`{green Copied template master package.json}\n`
-    } catch(err) {
-        msg += chalk`{red.bold Master package.json already exists - NOT COPIED}\n`
-    }
-}
-
-/**  npm install node-red */
-async function installNodeRed(pkgFolder) {
+/** Run npm install (optionally check for NR install)
+ * @param {string} pkgFolder The folder in which to run `npm install`.
+ * @param {string=} folder The master folder that should contain Node-RED. If present will check if NR successfully installed.
+ */
+async function installer(pkgFolder, folder='') {
     /** npm commands behave dreadfully. Many will error out even though they actually succeed. */
     try{
-        const { stdout, stderr } = await exec('npm run update-master', {'cwd': folder})
+        const { stdout, stderr } = await exec('npm install --production --unsafe-perm', {'cwd': pkgFolder})
         out.stdout = stdout
         out.stderr = stderr
     } catch(err) {
@@ -113,69 +91,61 @@ async function installNodeRed(pkgFolder) {
         out.stdout = err.stdout
         out.stderr = err.stderr
     } finally {
-        pkgFolder = tilib.findPackage('node-red', folder)
-        if ( pkgFolder !== null ) {
-            const nrPkg = tilib.readPackageJson(pkgFolder) || {'version':'N/A'}
-            msg += chalk`{green Node-RED v{bold ${nrPkg.version}} successfully installed}\n`
-        } else {
-            msg += chalk`{red.bold Node-RED failed to install}\n`
+        if ( folder !== '' ) {
+            pkgFolder = tilib.findPackage('node-red', folder)
+            if ( pkgFolder !== null ) {
+                const nrPkg = tilib.readPackageJson(pkgFolder) || {'version':'N/A'}
+                msg += chalk`{green Node-RED v{bold ${nrPkg.version}} successfully installed}\n`
+            } else {
+                msg += chalk`{red.bold Node-RED failed to install}\n`
+            }
         }
     }
 }
 
-/**  copy template data folder to data - creates folder if not exists - this is the userDir folder */
+/** Copy template data folder to data - creates folder if not exists - this is the userDir folder */
 async function copyDataTemplate() {
+    const fldrData = path.join(folder, 'data')
     try {
         await fs.copy(
             path.join(templatesFolder, 'data'),
-            path.join(folder, 'data'),
+            fldrData,
             {
                 'overwrite': false,
                 'errorOnExist': true,
             }
         )
-        msg += chalk`{green Copied data folder from templates}\n`
+        msg += chalk`{green Copied template data (userDir) folder to ${fldrData}}\n`
     } catch(err) {
-        msg += chalk`{red.bold Data folder already exists - NOT COPIED}\n`
+        msg += chalk`{red.bold Data (userDir) folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${fldrData}}\n`
     }
 }
 
-/**  copy template system folder to root */
-async function copySystemTemplate() {
+/** Copy template master folder to root */
+async function copyMasterTemplate() {
     try {
         await fs.copy(
-            path.join(templatesFolder, 'system'),
-            path.join(folder, 'system'),
+            path.join(templatesFolder, 'master'),
+            path.normalize(folder),
             {
                 'overwrite': false,
                 'errorOnExist': true,
             }
         )
-        msg += chalk`{green Copied system folder from templates to root folder}\n`
+        msg += chalk`{green Copied template master folder from templates to root folder: ${folder}}\n`
     } catch(err) {
-        msg += chalk`{red.bold System folder already exists in root - NOT COPIED}\n`
+        msg += chalk`{red.bold Root folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${folder}}\n`
     }
 }
 
-/**  copy template bin folder to root/bin - creates folder if not exists - holds NR restart script */
-async function copyRootBinTemplate() {
-    try {
-        await fs.copy(
-            path.join(templatesFolder, 'rootBin'),
-            path.join(folder, 'bin'),
-            {
-                'overwrite': false,
-                'errorOnExist': true,
-            }
-        )
-        msg += chalk`{green Copied rootBin folder from templates to <root>/bin}\n`
-    } catch(err) {
-        msg += chalk`{red.bold root/bin folder already exists - NOT COPIED}\n`
-    }
-}
-
-/**  copy ./node_modules/node-red/settings.js to ./data/settings.js */
+/** If they don't exist, copy ./node_modules/node-red/settings.js to ./data/settings.js */
 async function copySettings(pkgFolder) {
+    const userDirSettings = path.join(folder, 'data', 'settings.js')
+
+    if ( fs.existsSync(userDirSettings) ) return
+
+    // If userDir/settings.js doesn't exist, copy it
+
     if (pkgFolder === null) pkgFolder = tilib.findPackage('node-red', folder)
     if ( pkgFolder !== null ) {
         //msg += chalk`{blue \nNode-RED package folder found: ${pkgFolder}\n}`
@@ -183,7 +153,7 @@ async function copySettings(pkgFolder) {
         try {
             await fs.copy(
                 path.join(pkgFolder, 'settings.js'),
-                path.join(folder, 'data', 'settings.js'),
+                userDirSettings,
                 {
                     'overwrite': false,
                     'errorOnExist': true,
@@ -201,24 +171,20 @@ async function copySettings(pkgFolder) {
 
 /** Coordinate sync/async functions */
 async function main() {
-    await ensureFolderExists()
 
-    await copyMasterPackage()
+    await copyMasterTemplate()
 
     //These can happen in parallel
     await Promise.all([
-        installNodeRed(),
+        installer(pkgFolder, folder), // install contents of master package.json
         copyDataTemplate(),
-        copySystemTemplate(),
-        copyRootBinTemplate(),
     ])
 
-    /**  copy ./node_modules/node-red/settings.js to ./data/settings.js */
+    /** If they don't exist, copy ./node_modules/node-red/settings.js to ./data/settings.js */
     await copySettings(pkgFolder)
 
     /** Tell the user what happened */
-    const msgBox = boxen( msg, boxenOptions )
-    console.log(msgBox)
+    console.log( boxen( msg, boxenOptions ) )
 }
 
 /** Do it */

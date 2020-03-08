@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// This file runs after alternate-node-red-installer has been installed using npm //
 'use strict'
 
 /**
