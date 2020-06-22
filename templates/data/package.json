@@ -10,9 +10,9 @@
   "license": "MIT",
 
   "scripts": {
-    "start": "cd .. && node ../node_modules/node-red/red.js --userDir ./data",
-    "admin": "cd .. && node ../node_modules/node-red-admin/node-red-admin.js",
-    "inspect": "cd .. && node --inspect ../node_modules/node-red/red.js --userDir ./data",
+    "start": "cd .. && node node_modules/node-red/red.js --userDir ./data",
+    "admin": "cd .. && node node_modules/node-red-admin/node-red-admin.js",
+    "inspect": "cd .. && node --inspect node_modules/node-red/red.js --userDir ./data",
 
     "update": "npm run update-data",
     "check": "npm run check-data",
