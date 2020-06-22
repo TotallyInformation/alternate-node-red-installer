@@ -1,6 +1,6 @@
 {
   "name": "node-red-userdir",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Test environment for developing Node-RED flows",
   "main": "../node_modules/node-red/red.js",
   "keywords": [
