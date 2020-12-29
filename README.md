@@ -120,8 +120,10 @@ So from either the master or the data folders:
 
 * `npm run check-master` checks the master folder to see if either the `node-red` or `node-red-admin` packages need updating.
 * `npm run update-master` reinstalls both `node-red` and `node-red-admin` using the `--unsafe-perm` parameter for Node-RED.
-    It does a reinstall rather than an update as, in the past, things like the serialport dependencies have failed
-    unless you do a full reinstall (mainly after updating NodeJS itself to a new version).
+   
+   It does a reinstall rather than an update as, in the past, things like the serialport dependencies have failed
+   unless you do a full reinstall (mainly after updating NodeJS itself to a new version).
+   
 * `npm run check-data` and `npm run update-data` check and update any outstanding nodes and other packages you may have installed.
 
 Each of the two package.json files also has a simple `check` and `update` run script that applies to the corresponding folder.

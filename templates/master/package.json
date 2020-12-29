@@ -31,8 +31,6 @@
     "minor": "npm version minor -m \"Minor version bump to %s\" ",
     "major": "npm version major -m \"Major version bump to %s\"",
 
-    "postinstall": "node ./system/postinstall.js",
-
     "win-tag": "git tag -a v%npm_package_version% -m \"Release v%npm_package_version%\"; git push origin --tags",
     "tag": "git tag -a v$npm_package_version -m \"Release v$npm_package_version\" && git push origin --tags"
   },

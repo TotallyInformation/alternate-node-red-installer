@@ -32,6 +32,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec)
 const tilib = require('../tilib')
 const ora = require('ora') // console spinner
+const replace = require('replace-in-file')
 
 /** Parameters from command line
  * @type {Object} options
@@ -81,8 +82,9 @@ var msg = chalk`{cyan.bold.underline Alternate Installer for Node-RED}
  */
 async function installer(pkgFolder, folder='') {
     /** npm commands behave dreadfully. Many will error out even though they actually succeed. */
+    console.log({folder})
     try{
-        const { stdout, stderr } = await exec('npm install --production --unsafe-perm', {'cwd': pkgFolder})
+        const { stdout, stderr } = await exec('npm install --production --unsafe-perm', {'cwd': folder})
         out.stdout = stdout
         out.stderr = stderr
     } catch(err) {
@@ -103,8 +105,10 @@ async function installer(pkgFolder, folder='') {
     }
 }
 
-/** Copy template data folder to data - creates folder if not exists - this is the userDir folder */
-async function copyDataTemplate() {
+/** Copy template data folder to data - creates folder if not exists - this is the userDir folder 
+ * @param {string} folder The destination root folder
+*/
+async function copyDataTemplate(pkgFolder, folder) {
     const fldrData = path.join(folder, 'data')
     try {
         await fs.copy(
@@ -118,15 +122,28 @@ async function copyDataTemplate() {
         msg += chalk`{green Copied template data (userDir) folder to ${fldrData}}\n`
     } catch(err) {
         msg += chalk`{red.bold Data (userDir) folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${fldrData}}\n`
+        return
+    }
+
+    const fileReplaceOpts = {
+        files: path.join(fldrData, 'envfile.ini'),
+        from: /<root-folder-name>/g,
+        to: folder,
+    }
+    try {
+        const results = await replace(fileReplaceOpts)
+        console.log(`Replaced "<root-folder-name>" with ${folder}`, results)
+    } catch (error) {
+        console.error(`FAILED to Replace "<root-folder-name>" with ${folder} - change manually before use`, error)
     }
 }
 
 /** Copy template master folder to root */
-async function copyMasterTemplate() {
+async function copyMasterTemplate(pkgFolder, folder) {
     try {
         await fs.copy(
             path.join(templatesFolder, 'master'),
-            path.normalize(folder),
+            folder,
             {
                 'overwrite': false,
                 'errorOnExist': true,
@@ -135,6 +152,19 @@ async function copyMasterTemplate() {
         msg += chalk`{green Copied template master folder from templates to root folder: ${folder}}\n`
     } catch(err) {
         msg += chalk`{red.bold Root folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${folder}}\n`
+        return
+    }
+
+    const fileReplaceOpts = {
+        files: path.join(folder, 'system', 'node-red.service'),
+        from: /<root-folder-name>/g,
+        to: folder,
+    }
+    try {
+        const results = await replace(fileReplaceOpts)
+        console.log(`Replaced "<root-folder-name>" with ${folder}`, results)
+    } catch (error) {
+        console.error(`FAILED to Replace "<root-folder-name>" with ${folder} - change manually before use`, error)
     }
 }
 
@@ -170,25 +200,25 @@ async function copySettings(pkgFolder) {
 }
 
 /** Coordinate sync/async functions */
-async function main() {
+async function main(pkgFolder, folder) {
 
-    await copyMasterTemplate()
+    await copyMasterTemplate(pkgFolder, folder)
 
     //These can happen in parallel
     await Promise.all([
         installer(pkgFolder, folder), // install contents of master package.json
-        copyDataTemplate(),
+        copyDataTemplate(pkgFolder, folder),
     ])
 
     /** If they don't exist, copy ./node_modules/node-red/settings.js to ./data/settings.js */
-    await copySettings(pkgFolder)
+    await copySettings(pkgFolder, folder)
 
     /** Tell the user what happened */
     console.log( boxen( msg, boxenOptions ) )
 }
 
 /** Do it */
-main()
+main(pkgFolder, folder)
     .then( () => {
         spinner.stop()
 

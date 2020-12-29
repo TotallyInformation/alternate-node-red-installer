@@ -8,20 +8,19 @@ https://discourse.nodered.org/t/advice-setting-up-node-red-for-a-class/16650
 - Add an interactive mode.
 - Allow for configuration file.
 - Add --force option (overwrites destination folders)
-- Additional Optional tasks - post install of Node-RED
+- Additional Optional tasks, post install of Node-RED
+   
    - `npm install` in master folder (allows for custom templates to pre-install protected nodes)
    - `npm install` in userDir folder (allows for custom templates to pre-install nodes)
    - Initialise git in master folder
    - Initialise git in userDir folder
-   - 
 
 ## Future Thoughts
 
 These would be interesting extensions. I might one-day get to doing them.
 
-* Create a post-install script that:
-   * Tweaks the template systemd service definition
-   * Creates a Windows scheduler template allowing Node-RED to be run as a service on Windows 10
+* Tweak the template systemd service definition
+* Creates a Windows scheduler template allowing Node-RED to be run as a service on Windows 10   
 * Create a script for Linux that installs the systemd service definition
 * Create a sdript for Windows that installs Node-RED as a Windows Service
 * Allow a configuration file to install required Nodes and change `settings.js`

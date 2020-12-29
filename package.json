@@ -1,21 +1,21 @@
 {
   "name": "alternate-node-red-installer",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "An alternative installer for Node-RED. Avoids global installs, no admin rights required.",
   "scripts": {
     "patch": "npm version patch -m \"Patch version bump to %s\" ",
     "minor": "npm version minor -m \"Minor version bump to %s\" ",
     "major": "npm version major -m \"Major version bump to %s\"",
-    "postinstall": "node ./bin/postinstall.js",
     "win-tag": "git tag -a v%npm_package_version% -m \"Release v%npm_package_version%\"; git push origin --tags",
     "tag": "git tag -a v$npm_package_version -m \"Release v$npm_package_version\" && git push origin --tags"
   },
   "dependencies": {
-    "boxen": "^4.1.0",
-    "chalk": "^2.4.2",
-    "fs-extra": "^8.1.0",
-    "ora": "^4.0.2",
-    "yargs": "^14.2.0"
+    "boxen": "^5.0.0",
+    "chalk": "^4.1.0",
+    "fs-extra": "^9.0.1",
+    "ora": "^5.2.0",
+    "replace-in-file": "^6.1.0",
+    "yargs": "^16.2.0"
   },
   "main": "bin/install-node-red.js",
   "bin": {
@@ -25,7 +25,9 @@
     "type": "git",
     "url": "git+https://github.com/TotallyInformation/alternate-node-red-installer.git"
   },
-  "keywords": ["node-red"],
+  "keywords": [
+    "node-red"
+  ],
   "author": {
     "name": "Julian Knight",
     "url": "https://github.com/TotallyInformation"
@@ -36,7 +38,7 @@
   },
   "homepage": "https://github.com/TotallyInformation/alternate-node-red-installer#readme",
   "engines": {
-    "node": ">=8.16"
+    "node": ">=10"
   },
   "browserslist": [
     "> 0.5%",

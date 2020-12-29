@@ -17,35 +17,34 @@
 # View logs with `sudo journalctl -u <filename>` (e.g. `sudo journalctl -u node-red`)
 # View service status with `sudo systemctl status <filename>`
 #
-# VERSION: 2
+# VERSION: 3
+
+#----------------------------------------------------------------------------#
+# SECURITY NOTE:                                                             #
+# There are MANY additional settings that should be considered for this file #
+# if running in a production environment and ESPECIALLY if it is possible to #
+# access Node-RED over the INTERNET.                                         #
+# SELinux, Sandboxing and other limiting flags should be considered. See     # 
+# https://www.freedesktop.org/software/systemd/man/systemd.exec.html         #
+# for more details.                                                          #
+#----------------------------------------------------------------------------#
 
 [Unit]
 Description=Node-Red Home Automation service
 Documentation=https://github.com/TotallyInformation/alternate-node-red-installer http://nodered.org/docs
-# Syslog and Networking must be active before starting
-After=syslog.target network.target
+
+# Use the `systemd-analyze plot > something.svg` (or similar) command to produce a full dependency
+# visual that will let you sensibly adjust these settings for your system.
+# @see https://serverfault.com/a/617864/119582
+
+# NB: Use the `systemd-analyze` command to understand the order of 
+# Syslog, Networking must be active before starting - adjust to requirements
+After=network.target
 # Mosquitto (MQTT) & InfluxDB may be wanted - ADJUST to need
 #Wants=mosquitto.service influxdb.service
 
 [Service]
 Type=simple
-
-# -- Set any required environment variables - ADJUST these according to your installation --
-Environment="NODE-RED-PROJECT=/home/pi/node-red" # <=== ADJUST TO NEED
-Environment="NODE_RED_OPTIONS=--userDir /home/pi/node-red/data -v"
-# Only when running on systems (like most Pi's) with 1GiB or less of RAM
-Environment="NODE_OPTIONS=--max-old-space-size=128"
-
-# Or use an environment variables file, overrides the Environment settings
-# makes it nice and easy to change without having to edit this file.
-# Ignored if file does not exist. Entries in file overwrite those above.
-# @See https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=
-EnvironmentFile=-/home/pi/node-red/data/envfile.ini
-
-# No path environment variable is yet available here so make sure absolute folders specified
-ExecStart=/usr/bin/node $NODE_OPTIONS $NODE-RED-PROJECT/node_modules/node-red/red.js $NODE_RED_OPTIONS
-
-WorkingDirectory=$NODE-RED-PROJECT
 
 # User/Group that launches node-RED (it's advised to create a new user for Node-RED)
 # You can do : sudo useradd node-red then change the User=pi to User=node-red
@@ -54,16 +53,55 @@ WorkingDirectory=$NODE-RED-PROJECT
 User=pi
 Group=pi
 
-Nice=10
+# -- Set any required environment variables - ADJUST these according to your installation --
+#    Do not forget to change settings in ./data/envfile.ini as well
+#    NOTE: No variable expansion is done.
+#          Do not put credentials into environment variables - use LoadCredential or SetCredential
 
-SyslogIdentifier=NR
-StandardOutput=syslog
+Environment="NODE_RED_EXE=<root-folder-name>/node_modules/node-red/red.js"
+Environment="NODE_RED_OPTIONS=--userDir <root-folder-name>/data -v"
+
+# Only when running on systems (like most Pi's) with 1GiB or less of RAM
+# Comment out if you have plenty of RAM so that Node.js decides.
+#Environment="NODE_OPTIONS=--max-old-space-size=128"
+Environment="NODE_OPTIONS=--max-old-space-size=512"
+
+# Un-comment if needing proxy to get external network
+#Environment="HTTP_PROXY=http://myproxy.com:8080"
+#Environment="NO_PROXY=.acme.co,.acme.co.uk"
+
+# Or use an environment variables file, overrides the Environment settings
+# makes it nice and easy to change without having to edit this file.
+# Ignored if file does not exist. Entries in file overwrite those above.
+# @See https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=
+EnvironmentFile=-"<root-folder-name>/data/envfile.ini"
+
+WorkingDirectory="<root-folder-name>"
+
+# PID file
+PIDFile="<root-folder-name>/nrmain.pid"
+
+# Command that is started - for the alternate installer or other manually installed `npm install node-red`
+# @see https://man7.org/linux/man-pages/man5/systemd.service.5.html#COMMAND_LINES for details
+ExecStart=/usr/bin/node $NODE_OPTIONS $NODE_RED_EXE $NODE_RED_OPTIONS
+# Command to start when using Dave's install script on a Pi
+#ExecStart=/usr/bin/env node-red-pi $NODE_OPTIONS $NODE_RED_OPTIONS
+
+# uncomment next line if you need to wait for time sync before starting
+#ExecStartPre=/bin/bash -c '/bin/journalctl -b -u systemd-timesyncd | /bin/grep -q "systemd-timesyncd.* Synchronized to time server"'
+
+# Guide the priority of the service - how "nice" it plays with other running tasks
+# @see https://www.freedesktop.org/software/systemd/man/systemd.resource-control.html for additional settings
+# including the ability to control swap use.
+# Lower value is higher priority (-20 to 19, default=0)
+#Nice=5
+
+# Tag things in the log (goes to journal by default, access using the `journalctl` command)
+SyslogIdentifier=Node-RED
 
 # Make Node-RED restart if it fails
 Restart=on-failure
-
-#Restart=always
-#RestartSec=100
+RestartSec=20s  # Defaults to 100ms
 
 # Node-RED needs a SIGINT to be notified to stop
 KillSignal=SIGINT
@@ -73,4 +111,7 @@ KillSignal=SIGINT
 ProtectSystem=full
 
 [Install]
+# Node-RED must be started before the following is triggered
 WantedBy=multi-user.target
+
+#EOF
