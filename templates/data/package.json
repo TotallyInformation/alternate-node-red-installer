@@ -1,6 +1,6 @@
 {
   "name": "node-red-userdir",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Test environment for developing Node-RED flows",
   "main": "../node_modules/node-red/red.js",
   "keywords": [
@@ -10,9 +10,9 @@
   "license": "MIT",
 
   "scripts": {
-    "start": "node ../node_modules/node-red/red.js --userDir ./data",
-    "admin": "node ../node_modules/node-red-admin/node-red-admin.js",
-    "inspect": "node --inspect ../node_modules/node-red/red.js --userDir ./data",
+    "start": "cd .. && node node_modules/node-red/red.js --userDir ./data",
+    "admin": "cd .. && node node_modules/node-red-admin/node-red-admin.js",
+    "inspect": "cd .. && node --inspect node_modules/node-red/red.js --userDir ./data",
 
     "update": "npm run update-data",
     "check": "npm run check-data",
