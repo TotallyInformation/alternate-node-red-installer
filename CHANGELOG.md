@@ -13,10 +13,13 @@ alternate-node-red-installer adheres to [Semantic Versioning](https://semver.org
 ### Added
 
 - [CHANGELOG](./CHANGELOG.md) and [TODO](./TODO.md) files.
+- Two command line commands are now available if you install this package globally:
+   - `alternate-node-red-installer` - OK, so this is a bit long and I can never remember it myself!
+   - `nrinstall` - Yes, that's a bit more memorable. 😎
 
 ### Changed
 
-- Bump to v2.0 due to breaking change.
+- Bump to v2.0 due to breaking change. And to v2.0.1 for the extra command name.
 - Bump dependencies to latest versions.
 - Tidy and improve code.
 - Install now sets correct paths in `./system/node-red-service` and `./data/envfile.ini`.
