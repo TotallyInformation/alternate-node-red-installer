@@ -1,6 +1,6 @@
 {
   "name": "alternate-node-red-installer",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "description": "An alternative installer for Node-RED. Avoids global installs, no admin rights required.",
   "scripts": {
     "patch": "npm version patch -m \"Patch version bump to %s\" ",
