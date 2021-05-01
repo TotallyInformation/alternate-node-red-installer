@@ -6,11 +6,23 @@ alternate-node-red-installer adheres to [Semantic Versioning](https://semver.org
 
 ## [Unreleased](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v2.0.2...master)
 
+None
+
+## [2.0.3](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v2.0.2...v2.0.3)
+
 ### Added
 
-- `backup.sh`, `backupw.sh`, and `backupm.sh` BASH scripts to efficiently back up your working Node-RED installation if installed using this alternate installer.
+- An example `settings.js` file (`data/example-settings/js`)
+
+  This contains a number of enhancements over the default including extended information that can be collapsed for easier reading.
+
+  It also is configured to pick up the environment variables specified in this packages templates.
+  
+- `backup.sh`, `backupw.sh`, and `backupm.sh` BASH scripts in the new `scripts` folder to efficiently back up your working Node-RED installation if installed using this alternate installer.
   
   The scripts should be run from CRON daily, weekly and monthly respectively.
+
+  Please amend the indicated variables in the scripts so that they will work for your own installation.
 
   ```text
   # Node-RED daily backup (3AM every day)
@@ -24,6 +36,8 @@ alternate-node-red-installer adheres to [Semantic Versioning](https://semver.org
   They give you 7 days of daily backups, 5 weekly backups, and 12 monthly backups. They should be easy enough to adapt to whatever schedule you want.
 
   Output from the scripts are written to syslog, review with `sudo cat /var/log/syslog | grep nrmain-backup` or `sudo journalctl -t nrmain-backup`.
+
+  Note that the backup scripts have been updated for Node-RED v1.3 such that `data/externalModules/node_modules` is excluded.
 
 ## [2.0.2](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v1.0.0...v2.0.2)
 ### Breaking

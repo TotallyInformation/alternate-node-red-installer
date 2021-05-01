@@ -17,10 +17,12 @@ alternate-node-red-installer -f <root folder name>
 
 Where <root folder name>` is a relative or absolute folder path that you want to be the root of your new Node-RED installation.
 
+Instead of the long-winded executable name, you can also use `nrinstall`
+
 Example (for Mac, Linux or Windows PowerShell):
 
 ```
-alternate-node-red-installer -f ~/nrtest
+nrinstall -f ~/nrtest
 ```
 
 Once the install has completed (it may take some time), you can navigate to the data sub-folder and work with Node-RED as normal (e.g. `cd ~/nrtest/data`).
@@ -43,7 +45,7 @@ These instructions should work on any platform supported by Node.JS.
   * [The solution](#the-solution)
   * [The advamtages](#the-advamtages)
   * [Starting Node-RED](#starting-node-red)
-  * [Updating](#updating)
+  * [Updating Node-RED and installed nodes](#updating-node-red-and-installed-nodes)
   * [Changes](#changes)
   * [To Do](#to-do)
   * [Prerequisites](#prerequisites)
@@ -110,7 +112,7 @@ When using this method, uou can start Node-RED manually from either the master o
 The start script tells Node-RED of the correct userDir folder (the `data` sub-folder). You can also use the
 start script with any other method you may wish to use of starting Node-RED (Windows Scheduler, systemd, PM2, nodemon, etc.)
 
-## Updating
+## Updating Node-RED and installed nodes
 
 If you have installed the two `package.json` files in this repository, you will find that they contain `npm run ...`
 scripts such as `check-master` and `update-data`. These scripts do everything necessary to see if anything needs
@@ -140,4 +142,4 @@ Please see the [TODO](./TODO.md) file.
 
 ## Prerequisites
 
-* NodeJS. v8.16.0 (LTS) is the minimum supported version.
+* NodeJS. v10 is the minimum supported version.
