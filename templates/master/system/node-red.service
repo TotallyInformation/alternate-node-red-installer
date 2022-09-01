@@ -1,6 +1,9 @@
 # A TEMPLATE systemd service file for running Node-RED
 # CHANGE the settings before use.
 #
+# Make sure that you replace all instances of <root-folder-name> with the actual
+# absolute root path.
+#
 # See https://github.com/TotallyInformation/alternate-node-red-installer
 #     https://gist.github.com/Belphemur/3f6d3bf211b0e8a18d93
 #     http://www.freedesktop.org/wiki/Software/systemd/
@@ -64,9 +67,11 @@ Environment="NODE_RED_OPTIONS=--userDir <root-folder-name>/data -v"
 # Only when running on systems (like most Pi's) with 1GiB or less of RAM
 # Comment out if you have plenty of RAM so that Node.js decides.
 #Environment="NODE_OPTIONS=--max-old-space-size=128"
-Environment="NODE_OPTIONS=--max-old-space-size=512"
+# Generally not needed any more, let Node.js manage things.
+#Environment="NODE_OPTIONS=--max-old-space-size=512"
 
-# Un-comment if needing proxy to get external network
+# Un-comment if needing proxy to get to external network
+# Also see the httpServerOptions setting where you can tell node-red which incoming proxies to trust
 #Environment="HTTP_PROXY=http://myproxy.com:8080"
 #Environment="NO_PROXY=.acme.co,.acme.co.uk"
 
@@ -74,12 +79,12 @@ Environment="NODE_OPTIONS=--max-old-space-size=512"
 # makes it nice and easy to change without having to edit this file.
 # Ignored if file does not exist. Entries in file overwrite those above.
 # @See https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=
-EnvironmentFile=-"<root-folder-name>/data/envfile.ini"
+EnvironmentFile=-<root-folder-name>/data/envfile.ini
 
-WorkingDirectory="<root-folder-name>"
+WorkingDirectory=<root-folder-name>
 
 # PID file
-PIDFile="<root-folder-name>/nrmain.pid"
+PIDFile=<root-folder-name>/nrmain.pid
 
 # Command that is started - for the alternate installer or other manually installed `npm install node-red`
 # @see https://man7.org/linux/man-pages/man5/systemd.service.5.html#COMMAND_LINES for details
