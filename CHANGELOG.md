@@ -8,6 +8,20 @@ alternate-node-red-installer adheres to [Semantic Versioning](https://semver.org
 
 None
 
+## [3.0.0](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v2.0.3...v3.0.0)
+
+### Breaking
+
+* Minimum version of Node.js supported is now v12
+
+### Changed
+
+* Dependencies updated (note that several dependencies from Sindresorhus are used - annoyingly he has forced a move to ESM only, this is just too hard to contemplate right now so still using older versions)
+
+### Fixed
+
+* Removed some extraneous quotes
+
 ## [2.0.3](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v2.0.2...v2.0.3)
 
 ### Added

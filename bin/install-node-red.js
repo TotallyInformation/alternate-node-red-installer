@@ -8,7 +8,7 @@
  * Author: Julian Knight (Totally Information), July 2019
  *
  * License: MIT
- * Copyright (c) 2019 Julian Knight (Totally Information)
+ * Copyright (c) 2019-2022 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk
  *
  * Process Outline:
@@ -107,7 +107,7 @@ async function installer(pkgFolder, folder='') {
 
 /** Copy template data folder to data - creates folder if not exists - this is the userDir folder 
  * @param {string} folder The destination root folder
-*/
+ */
 async function copyDataTemplate(pkgFolder, folder) {
     const fldrData = path.join(folder, 'data')
     try {
@@ -169,7 +169,7 @@ async function copyMasterTemplate(pkgFolder, folder) {
 }
 
 /** If they don't exist, copy ./node_modules/node-red/settings.js to ./data/settings.js */
-async function copySettings(pkgFolder) {
+async function copySettings(pkgFolder, folder) {
     const userDirSettings = path.join(folder, 'data', 'settings.js')
 
     if ( fs.existsSync(userDirSettings) ) return
