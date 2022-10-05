@@ -9,6 +9,8 @@ as a locally installed package. It contains an npm package.json file that will i
 2. Make sure that Node.js is at least at version 8.16.0 (LTS) or above.
 3. For ease of use, install this package globally with `npm install -g alternate-node-red-installer`. You may need to use a command line with elevated rights (`sudo` on Linux).
 
+> NB: You can use `nrinstall` as a command shortcut for `alternate-node-red-installer` 😁
+
 Now, from any command line, you should be able to run the following:
 
 ```
