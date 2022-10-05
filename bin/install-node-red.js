@@ -190,6 +190,7 @@ async function copySettings(pkgFolder, folder) {
                 }
             )
             msg += chalk`{green Copied master settings.js}\n`
+            msg += 'Check `example-settings.js` if you want an enhanced settings file.\n'
         } catch(err) {
             msg += chalk`{red.bold Master settings.js already exists - NOT COPIED}\n`
         }
@@ -199,7 +200,11 @@ async function copySettings(pkgFolder, folder) {
 
 }
 
-/** Coordinate sync/async functions */
+/** Coordinate sync/async functions
+ * 1) Copy the master template folder to specified root folder
+ * 2) Run npm install and copy the data folder (parallel)
+ * 3) Copy the custom settings to the data folder
+ */
 async function main(pkgFolder, folder) {
 
     await copyMasterTemplate(pkgFolder, folder)
@@ -214,6 +219,7 @@ async function main(pkgFolder, folder) {
     await copySettings(pkgFolder, folder)
 
     /** Tell the user what happened */
+    // @ts-ignore
     console.log( boxen( msg, boxenOptions ) )
 }
 
