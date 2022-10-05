@@ -1,6 +1,6 @@
 {
   "name": "node-red-master",
-  "version": "2.0.3",
+  "version": "3.0.2",
   "description": "Test environment for developing Node-RED flows",
   "main": "node_modules/node-red/red.js",
   "keywords": [
@@ -16,7 +16,7 @@
     "update": "npm run update-master",
     "check": "npm run check-master",
     "check-master": "npm outdated",
-    "update-master": "npm install --production --unsafe-perm",
+    "update-master": "npm install node-red@latest node-red-admin@latest --production --unsafe-perm",
     "check-data": "cd data && npm run check-data",
     "update-data": "cd data && npm run update-data",
 
@@ -26,13 +26,6 @@
 
     "adminui": "start http://localhost:1880/red/",
     "ui": "start http://localhost:1880/ui/",
-
-    "patch": "npm version patch -m \"Patch version bump to %s\" ",
-    "minor": "npm version minor -m \"Minor version bump to %s\" ",
-    "major": "npm version major -m \"Major version bump to %s\"",
-
-    "win-tag": "git tag -a v%npm_package_version% -m \"Release v%npm_package_version%\"; git push origin --tags",
-    "tag": "git tag -a v$npm_package_version -m \"Release v$npm_package_version\" && git push origin --tags"
   },
 
   "dependencies": {
@@ -40,7 +33,7 @@
     "node-red-admin": "*"
   },
 
-  "engines" : { "node" : ">=10.6" },
+  "engines" : { "node" : ">=14" },
   "browserslist": [
     "> 0.5%",
     "maintained node versions",
