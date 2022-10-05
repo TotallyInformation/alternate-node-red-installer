@@ -8,6 +8,18 @@ alternate-node-red-installer adheres to [Semantic Versioning](https://semver.org
 
 None
 
+## [4.0.0](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v3.0.0...v4.0.0)
+
+### Breaking
+
+* Minimum version of Node.js supported is now v12 in alignment with Node-RED v3
+* Update to node.js v14 as minimum
+* Update to node-red v3.0.2 as minimum
+
+## Changed
+
+* Minor improvements
+
 ## [3.0.0](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v2.0.3...v3.0.0)
 
 ### Breaking
