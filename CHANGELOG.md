@@ -8,16 +8,25 @@ alternate-node-red-installer adheres to [Semantic Versioning](https://semver.org
 
 None
 
-## [4.0.0](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v3.0.0...v4.0.0)
+## [3.0.2](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v3.0.0...v4.0.0)
+
+**WARNING**: Although this has the same major version number as the previous release, it is a breaking release. This is to allow the major versions to be aligned to Node-RED itself.
 
 ### Breaking
 
-* Minimum version of Node.js supported is now v12 in alignment with Node-RED v3
-* Update to node.js v14 as minimum
-* Update to node-red v3.0.2 as minimum
+* Minimum version of Node.js supported is now v14 in alignment with Node-RED v3.
+* Update to node-red v3.0.2 as minimum - the latest version of node-red will always be installed when `nrinstall` is run.
+
+## Fixed
+
+* Changes to the systemd service file - removing spurious quote characters.
+* Changes to the `data/envfile.ini` file - removing spurious quote characters.
 
 ## Changed
 
+* Update `example-settings.js` to a newer version - aligned to node-red v3.0.2 with enhancements & additional help
+* Removed `.eslintrc.js`/`.eslintrc.json` - not required
+* Removed `package-lock.json` - not required
 * Minor improvements
 
 ## [3.0.0](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v2.0.3...v3.0.0)

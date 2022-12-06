@@ -4,7 +4,7 @@
  * see ../node_modules/node-red/settings.js
  * @version Node-RED v3.0.2
  * To review changes: https://github.com/node-red/node-red/commits/master/packages/node_modules/node-red/settings.js
- * 
+ *
  * It can contain any valid JavaScript code that will get run when Node-RED is started.
  *
  * For more information about individual settings, refer to the documentation:
@@ -18,17 +18,17 @@
  *  - Editor Settings
  *  - Node Settings
  **/
-'use strict'
+ 'use strict'
 
-const path = require('path')   // Node core library. path library for cross-platform file system specs
-const fs   = require('fs')     // The `https` setting requires the `fs` module.
-//const _    = require('lodash'); // lodash (improved underscore) for JS utility fns
-
-/** Save a PID file so that Node-RED can be easily restarted even when run manually */
-const pid = process.pid
-console.info('PID: ', pid)
-process.env.node_red_pid = pid+''
-fs.readdir('.', (err, files)=>{
+ const path = require('path')   // Node core library. path library for cross-platform file system specs
+ const fs   = require('fs')     // The `https` setting requires the `fs` module.
+ //const _    = require('lodash'); // lodash (improved underscore) for JS utility fns
+ 
+ /** Save a PID file so that Node-RED can be easily restarted even when run manually */
+ const pid = process.pid
+ console.info('PID: ', pid)
+ process.env.node_red_pid = pid+''
+ fs.readdir('.', (err, files)=>{
     if (err) throw err
 
     for (var i = 0, len = files.length; i < len; i++) {
@@ -41,15 +41,16 @@ fs.readdir('.', (err, files)=>{
     fs.writeFile(`${pid}.pid`, `${pid}`, (err) => {
         if (err) throw err
     })
-})
-
-/** Optionally display the Node.js/v8 engine heap size on startup */
-const v8 = require('v8')
-console.info(`V8 Total Heap Size: ${(v8.getHeapStatistics().total_available_size / 1024 / 1024).toFixed(2)} MB`)
-let mem = process.memoryUsage()
-const formatMem = (m) => ( m/1048576 ).toFixed(2)
-console.info(`Initial Memory Use (MB): RSS=${formatMem(mem.rss)}. Heap: Used=${formatMem(mem.heapUsed)}, Tot=${formatMem(mem.heapTotal)}. Ext C++=${formatMem(mem.external)}`)
+ })
  
+ /** Optionally display the Node.js/v8 engine heap size on startup */
+ const v8 = require('v8')
+ console.info(`V8 Total Heap Size: ${(v8.getHeapStatistics().total_available_size / 1024 / 1024).toFixed(2)} MB`)
+ let mem = process.memoryUsage()
+ const formatMem = (m) => ( m/1048576 ).toFixed(2)
+ console.info(`Initial Memory Use (MB): RSS=${formatMem(mem.rss)}. Heap: Used=${formatMem(mem.heapUsed)}, Tot=${formatMem(mem.heapTotal)}. Ext C++=${formatMem(mem.external)}`)
+ 
+// All of the standard settings - with added folding regions and some additional comments for ease of use
 const nrsettings = {
 
     //#region ----- Flow File and User Directory Settings ----- //
@@ -62,8 +63,8 @@ const nrsettings = {
      *  - nodesDir
      ******************************************************************************/
 
-    /** The file containing the flows. If not set, it defaults to flows_<hostname>.json. Default: 'flows.json' */
-    flowFile: 'flows_dev.json',
+    /** The file containing the flows. If not set, defaults to flows_<hostname>.json */
+    flowFile: 'flows.json',
 
     /** By default, credentials are encrypted in storage using a generated key. To
      * specify your own secret, set the following property.
@@ -245,7 +246,7 @@ const nrsettings = {
      * can be used to specifiy a different root path. If set to false, this is
      * disabled.
      */
-    httpNodeRoot: process.env.httpNodeRoot || '/nr',
+    httpNodeRoot: process.env.httpNodeRoot || false,  // '/nr',
 
     /** The following property can be used to configure cross-origin resource sharing
      * in the HTTP nodes.
@@ -275,31 +276,26 @@ const nrsettings = {
      * @param {import("express").NextFunction} next Function that MUST be called at the end of this function so that further ExpressJS middleware functions will be chained
      */
     httpNodeMiddleware: function(req,res,next) {
-        // Handle/reject the request, or pass it on to the http in node by calling next();
-        // Optionally skip our rawBodyParser by setting this to true;
-        //req.skipRawBodyParser = true;
+    // Handle/reject the request, or pass it on to the http in node by calling next();
+    // Optionally skip our rawBodyParser by setting this to true;
+    //req.skipRawBodyParser = true;
 
-        res.setHeader('httpNodeMiddleware', 'true')
+    // Help reduce risk of XSS and other attacks
+    res.setHeader('X-XSS-Protection','1;mode=block')
+    res.setHeader('X-Content-Type-Options','nosniff')
+    //res.setHeader('X-Frame-Options','SAMEORIGIN')
+    //res.setHeader('Content-Security-Policy',"script-src 'self'")
 
-        res.setHeader('x-powered-by','Node-RED')
-        res.setHeader('x-environment','Dev Node')
+    // console.log('USER HEADERS', req.headers)
 
-        // Help reduce risk of XSS and other attacks
-        res.setHeader('X-XSS-Protection','1;mode=block')
-        res.setHeader('X-Content-Type-Options','nosniff')
-        //res.setHeader('X-Frame-Options','SAMEORIGIN')
-        //res.setHeader('Content-Security-Policy',"script-src 'self'")
-
-        // console.log('USER HEADERS', req.headers)
-    
-        next()
+    next()
     },
 
     /** When httpAdminRoot is used to move the UI to a different root path, the
      *  following property can be used to identify a directory of static content
      *  that should be served at http://localhost:1880/.
      */
-    httpStatic: process.env.httpStatic || path.join('.', 'public'),
+    //httpStatic: process.env.httpStatic || path.join('.', 'public'),
     /* OR multiple static sources can be created using an array of objects... */
     //httpStatic: [
     //    {path: path.join('.', 'pics'),    root: "/img/"}, 
@@ -341,7 +337,7 @@ const nrsettings = {
      *   NB: If httpAdminRoot is set, adjust the above accordingly
      * - ui: When `ui` is `true` (or unset), the action `show-system-info` will 
      *   be available to logged in users of node-red editor  
-    */
+ */
     diagnostics: {
         /** enable or disable diagnostics endpoint. Must be set to `false` to disable */
         enabled: true,
@@ -359,9 +355,9 @@ const nrsettings = {
      */
     runtimeState: {
         /** enable or disable flows/state endpoint. Must be set to `false` to disable */
-        enabled: true,
+        enabled: false,
         /** show or hide runtime stop/start options in the node-red editor. Must be set to `false` to hide */
-        ui: true,
+        ui: false,
     },
 
     /** Configure the logging output */
@@ -382,211 +378,223 @@ const nrsettings = {
             /** Whether or not to include audit events in the log output */
             audit: false,
         },
+
         /** Custom logging: https://nodered.org/docs/user-guide/runtime/logging */
-        // tilog: {
-        //     level: 'trace',
-        //     metrics: false,
-        //     audit: false,
-        //     handler: function(settings) {
-        //         // Called when the logger is initialised
-        //         const fs = require('fs')
-        //         const util = require('util')
-        //         const Chalk = require('chalk')
-        //         const chalk = new Chalk.Instance({level: 3})
-        //         // Use flags 'a' to append or 'w' to create new on restart
-        //         const log_file = fs.createWriteStream(__dirname + '/uibuilder.log', {flags : 'w'})
+
+        // An example output to a file but using color-coding with chalk.
+        // Make sure you install the dependencies first.
+        /*
+        tilog: {
+            level: 'trace',
+            metrics: false,
+            audit: false,
+            handler: function(settings) {
+                // Called when the logger is initialised
+                const fs = require('fs')
+                const util = require('util')
+                const Chalk = require('chalk')
+                const chalk = new Chalk.Instance({level: 3})
+                // Use flags 'a' to append or 'w' to create new on restart
+                const log_file = fs.createWriteStream(__dirname + '/uibuilder.log', {flags : 'w'})
                 
-        //         const tilogLevels = {
-        //             10: 'FATAL', 20: 'ERROR', 30: 'WARN ', 40: 'INFO ', 50: 'DEBUG', 60: 'TRACE', 98: 'AUDIT', 99: 'MTRIC'
-        //         }
+                const tilogLevels = {
+                    10: 'FATAL', 20: 'ERROR', 30: 'WARN ', 40: 'INFO ', 50: 'DEBUG', 60: 'TRACE', 98: 'AUDIT', 99: 'MTRIC'
+                }
 
-        //         const tilog = function(d) { //
-        //             log_file.write(util.format.apply(null, arguments) + '\n')
-        //             //log_stdout.write(util.format(d) + '\n');
-        //         }
+                const tilog = function(d) { //
+                    log_file.write(util.format.apply(null, arguments) + '\n')
+                    //log_stdout.write(util.format(d) + '\n');
+                }
 
-        //         /** Return the logging function
-        //          * msg schema: { id, level, type, msg, timestamp}
-        //          * id = The node instance that produces the msg
-        //          * level = 10: fatal, 20: error, 30: warn, 40: Info, 50: Debug, 60: Trace
-        //          * timestamp = Javascript timestamp. Use `(new Date(msg.timestamp)).toIsoString()` or similar to convert
-        //          * type = 'flow' - not clear when/why this is produced
-        //          */
-        //         return function(msg) {
-        //             if ( msg.level < 51 || msg.msg.includes('[uibuilder') || msg.msg.startsWith('+-') || msg.msg.startsWith('| ') || msg.msg.startsWith('>>') ) {
-        //                 //console.log('TOLOG: ', msg)
-        //                 if (msg.msg.includes('[uibuilder:')) msg.msg = msg.msg.replace('[uibuilder:', '[')
-        //                 let msgColor, introColor
-        //                 switch (msg.level) {
-        //                     case 10: { // fatal
-        //                         msgColor = chalk.redBright
-        //                         introColor = msgColor.bold.inverse
-        //                         break
-        //                     }
+                // Return the logging function
+                // msg schema: { id, level, type, msg, timestamp}
+                // id = The node instance that produces the msg
+                // level = 10: fatal, 20: error, 30: warn, 40: Info, 50: Debug, 60: Trace
+                // timestamp = Javascript timestamp. Use `(new Date(msg.timestamp)).toIsoString()` or similar to convert
+                // type = 'flow' - not clear when/why this is produced
+                return function(msg) {
+                    if ( msg.level < 51 || msg.msg.includes('[uibuilder') || msg.msg.startsWith('+-') || msg.msg.startsWith('| ') || msg.msg.startsWith('>>') ) {
+                        //console.log('TOLOG: ', msg)
+                        if (msg.msg.includes('[uibuilder:')) msg.msg = msg.msg.replace('[uibuilder:', '[')
+                        let msgColor, introColor
+                        switch (msg.level) {
+                            case 10: { // fatal
+                                msgColor = chalk.redBright
+                                introColor = msgColor.bold.inverse
+                                break
+                            }
                         
-        //                     case 20: { // error
-        //                         msgColor = chalk.red
-        //                         introColor = msgColor.inverse
-        //                         break
-        //                     }
+                            case 20: { // error
+                                msgColor = chalk.red
+                                introColor = msgColor.inverse
+                                break
+                            }
                         
-        //                     case 30: { // warn
-        //                         msgColor = chalk.rgb(255, 185, 0)
-        //                         introColor = msgColor.inverse
-        //                         break
-        //                     }
+                            case 30: { // warn
+                                msgColor = chalk.rgb(255, 185, 0)
+                                introColor = msgColor.inverse
+                                break
+                            }
                         
-        //                     case 40: { // info
-        //                         msgColor = chalk.yellow
-        //                         introColor = msgColor.inverse
-        //                         break
-        //                     }
+                            case 40: { // info
+                                msgColor = chalk.yellow
+                                introColor = msgColor.inverse
+                                break
+                            }
                         
-        //                     case 50: { // debug
-        //                         msgColor = chalk.greenBright
-        //                         introColor = msgColor.inverse
-        //                         break
-        //                     }
+                            case 50: { // debug
+                                msgColor = chalk.greenBright
+                                introColor = msgColor.inverse
+                                break
+                            }
                         
-        //                     case 60: { // trace
-        //                         msgColor = chalk.cyanBright
-        //                         introColor = msgColor.inverse
-        //                         break
-        //                     }
+                            case 60: { // trace
+                                msgColor = chalk.cyanBright
+                                introColor = msgColor.inverse
+                                break
+                            }
                         
-        //                     default: {
-        //                         msgColor = chalk.reset
-        //                         introColor = msgColor.inverse
-        //                         break
-        //                     }
-        //                 }
-        //                 let intro = introColor(tilogLevels[msg.level]+'|')
-        //                 tilog( intro, msgColor(msg.msg) )
-        //             }
-        //             // else {
-        //             //     tilog(
-        //             //         `?? ${tilogLevels[msg.level]}:`, msg.msg
-        //             //     )                        
-        //             // }
-        //         }
-        //     }
-        // },
-        // winstonLog: {
-        //     level: 'trace',
-        //     metrics: false,
-        //     audit: false,
-        //     handler: function(settings) {
-        //         // const winstond = require('winstond')
+                            default: {
+                                msgColor = chalk.reset
+                                introColor = msgColor.inverse
+                                break
+                            }
+                        }
+                        let intro = introColor(tilogLevels[msg.level]+'|')
+                        tilog( intro, msgColor(msg.msg) )
+                    }
+                    // else {
+                    //     tilog(
+                    //         `?? ${tilogLevels[msg.level]}:`, msg.msg
+                    //     )                        
+                    // }
+                }
+            }
+        },
+        */
 
-        //         // const server = winstond.nssocket.createServer({
-        //         //     services: ['collect', 'query', 'stream'],
-        //         //     port: 9003
-        //         // });
+        // An example of custom logging using Winston. You must `npm install winston` to this folder.
+        /*
+        winstonLog: {
+            level: 'trace',
+            metrics: false,
+            audit: false,
+            handler: function(settings) {
+                // const winstond = require('winstond')
 
-        //         // server.add(winstond.transports.File, {
-        //         //     filename: __dirname + '/foo.log'
-        //         // })
+                // const server = winstond.nssocket.createServer({
+                //     services: ['collect', 'query', 'stream'],
+                //     port: 9003
+                // });
 
-        //         // server.listen()
+                // server.add(winstond.transports.File, {
+                //     filename: __dirname + '/foo.log'
+                // })
 
-        //         // const winston = require('winston')
-        //         // require('winston-mqtt').MqttTransport
+                // server.listen()
 
-        //         const myCustomLevels = {
-        //             levels: {
-        //                 'FATAL':10, 
-        //                 'ERROR':20, 
-        //                 'WARN ':30, 
-        //                 'INFO ':40, 
-        //                 'DEBUG':50, 
-        //                 'TRACE':60, 
-        //                 'AUDIT':98, 
-        //                 'MTRIC':99
-        //             },
-        //             colors: {
-        //                 'FATAL':'redBG', 
-        //                 'ERROR':'red', 
-        //                 'WARN ':'orange', 
-        //                 'INFO ':'yellow', 
-        //                 'DEBUG':'green', 
-        //                 'TRACE':'cyan', 
-        //                 'AUDIT':'grey', 
-        //                 'MTRIC':'grey'
-        //             }
-        //         }
+                // const winston = require('winston')
+                // require('winston-mqtt').MqttTransport
 
-        //         // winston.add(require('winston-nssocket').Nssocket, {
-        //         //     host: 'localhost',
-        //         //     port: 9003
-        //         // })
+                const myCustomLevels = {
+                    levels: {
+                        'FATAL':10, 
+                        'ERROR':20, 
+                        'WARN ':30, 
+                        'INFO ':40, 
+                        'DEBUG':50, 
+                        'TRACE':60, 
+                        'AUDIT':98, 
+                        'MTRIC':99
+                    },
+                    colors: {
+                        'FATAL':'redBG', 
+                        'ERROR':'red', 
+                        'WARN ':'orange', 
+                        'INFO ':'yellow', 
+                        'DEBUG':'green', 
+                        'TRACE':'cyan', 
+                        'AUDIT':'grey', 
+                        'MTRIC':'grey'
+                    }
+                }
 
-        //         // const { combine, timestamp, label, printf, splat, prettyPrint, colorize } = winston.format
+                // winston.add(require('winston-nssocket').Nssocket, {
+                //     host: 'localhost',
+                //     port: 9003
+                // })
 
-        //         // const myFormat = printf(({ level, message, label, timestamp }) => {
-        //         //     //return `${timestamp} ${level}| [${label}] ${message}`
-        //         //     return `${level}| ${message.replace('[uibuilder:','[')}`
-        //         // })
+                // const { combine, timestamp, label, printf, splat, prettyPrint, colorize } = winston.format
 
-        //         // var mylog = winston.createLogger({
-        //         //     levels: myCustomLevels.levels, //winston.config.npm.levels, //
-        //         //     level: 'TRACE',
-        //         //     transports: [
-        //         //         //new winston.transports.Console({ format: winston.format.simple() }),
-        //         //         new winston.transports.File({ filename: 'uibuilder1.log' }),
-        //         //         new winston.transports.Http({ // https://github.com/winstonjs/winston/blob/HEAD/docs/transports.md#http-transport
-        //         //             host: 'localhost',
-        //         //             port: 1880,
-        //         //             path: '/nr/winston',
-        //         //             // auth, ssl
-        //         //         }),
-        //         //         new winston.transports.MqttTransport, {
-        //         //             name: 'node-red',
-        //         //             topic: 'log',
-        //         //             host: 'mqtt://localhost:1883',
-        //         //             // requestTracer: {
-        //         //             //   instance: myRequestObject,
-        //         //             //   property: 'requestId'
-        //         //             // }
-        //         //          }
-        //         //     ],
-        //         //     // https://github.com/winstonjs/logform#readme
-        //         //     format: combine(
-        //         //         //label({ label: 'right meow!' }),
-        //         //         //timestamp(),
-        //         //         colorize({ colors: myCustomLevels.colors, all:true }),
-        //         //         prettyPrint(),
-        //         //         myFormat
-        //         //     ),
-        //         // })
+                // const myFormat = printf(({ level, message, label, timestamp }) => {
+                //     //return `${timestamp} ${level}| [${label}] ${message}`
+                //     return `${level}| ${message.replace('[uibuilder:','[')}`
+                // })
 
-        //         // mylog.log({
-        //         //     'level': 'TRACE',
-        //         //     'message': 'Hello'
-        //         // })
+                // var mylog = winston.createLogger({
+                //     levels: myCustomLevels.levels, //winston.config.npm.levels, //
+                //     level: 'TRACE',
+                //     transports: [
+                //         //new winston.transports.Console({ format: winston.format.simple() }),
+                //         new winston.transports.File({ filename: 'uibuilder1.log' }),
+                //         new winston.transports.Http({ // https://github.com/winstonjs/winston/blob/HEAD/docs/transports.md#http-transport
+                //             host: 'localhost',
+                //             port: 1880,
+                //             path: '/nr/winston',
+                //             // auth, ssl
+                //         }),
+                //         new winston.transports.MqttTransport, {
+                //             name: 'node-red',
+                //             topic: 'log',
+                //             host: 'mqtt://localhost:1883',
+                //             // requestTracer: {
+                //             //   instance: myRequestObject,
+                //             //   property: 'requestId'
+                //             // }
+                //          }
+                //     ],
+                //     // https://github.com/winstonjs/logform#readme
+                //     format: combine(
+                //         //label({ label: 'right meow!' }),
+                //         //timestamp(),
+                //         colorize({ colors: myCustomLevels.colors, all:true }),
+                //         prettyPrint(),
+                //         myFormat
+                //     ),
+                // })
 
-        //         // winston.stream().on('log', function (log) {
-        //         //     console.log(log);
-        //         // });
+                // mylog.log({
+                //     'level': 'TRACE',
+                //     'message': 'Hello'
+                // })
 
-        //         // winston.query({ start: 10 }, function (err, results) {
-        //         //     if (err) throw err;
-        //         //     console.log(results);
-        //         // });
+                // winston.stream().on('log', function (log) {
+                //     console.log(log);
+                // });
 
-        //         const nrLogLevels = {
-        //             10: 'FATAL', 20: 'ERROR', 30: 'WARN ', 40: 'INFO ', 50: 'DEBUG', 60: 'TRACE', 98: 'AUDIT', 99: 'MTRIC'
-        //         }
+                // winston.query({ start: 10 }, function (err, results) {
+                //     if (err) throw err;
+                //     console.log(results);
+                // });
 
-        //         // return function(msg) {
-        //         //     if ( msg.level < 51 || msg.msg.includes('[uibuilder') || msg.msg.startsWith('+-') || msg.msg.startsWith('| ') || msg.msg.startsWith('>>') ) {
-        //         //         mylog.log({
-        //         //             'level': nrLogLevels[msg.level],
-        //         //             'message': msg.msg
-        //         //         })
-        //         //     }
-        //         // }
-        //     }
-        // },
+                const nrLogLevels = {
+                    10: 'FATAL', 20: 'ERROR', 30: 'WARN ', 40: 'INFO ', 50: 'DEBUG', 60: 'TRACE', 98: 'AUDIT', 99: 'MTRIC'
+                }
+
+                // return function(msg) {
+                //     if ( msg.level < 51 || msg.msg.includes('[uibuilder') || msg.msg.startsWith('+-') || msg.msg.startsWith('| ') || msg.msg.startsWith('>>') ) {
+                //         mylog.log({
+                //             'level': nrLogLevels[msg.level],
+                //             'message': msg.msg
+                //         })
+                //     }
+                // }
+            }
+        },
+        */
+
+        // Output log data to a single topic on MQTT - this can then be consumed in Node-RED itself
+        /*
         mqttLog: {
             level: 'trace',
             metrics: false,
@@ -618,16 +626,20 @@ const nrsettings = {
                     } 
                 }
 
+                // You need to have installed: `npm install mqtt` to this folder for this to work 
                 const mqtt = require('mqtt')
-                const client  = mqtt.connect('mqtt://home.knightnet.co.uk')
+                // Where is your MQTT broker?
+                const client  = mqtt.connect('mqtt://localhost')
 
                 return function(msg) {
+                    // An example of filtering the log output - adjust to your needs
                     if ( msg.level < 51 || msg.msg.includes('[uibuilder') || msg.msg.startsWith('+-') || msg.msg.startsWith('| ') || msg.msg.startsWith('>>') ) {
                         client.publish( 'nrlog/dev', JSON.stringify(msg) )
                     }
                 }
             }
         },
+        */
     },
 
     /** Context Storage
@@ -658,7 +670,7 @@ const nrsettings = {
      * By default, the property is set to false to avoid accidental exposure of
      * their values. Setting this to true will cause the keys to be listed.
      */
-    exportGlobalContextKeys: true,
+    exportGlobalContextKeys: false,
 
     /** Configure how the runtime will handle external npm modules.
      * This covers:
@@ -749,13 +761,14 @@ const nrsettings = {
                  * This can be overridden per-user from the 'Git config'
                  *   section of 'User Settings' within the editor.
                  */
-                mode: 'auto'
+                mode: 'manual'
             },
         },
 
         codeEditor: {
             /** Select the text editor component used by the editor.
              *  As of Node-RED V3, this defaults to "monaco", but can be set to "ace" if desired
+             *  ACE is likely to be deprecated in a future release.
              */
             lib: 'monaco', // 'ace',
             options: {
@@ -772,11 +785,11 @@ const nrsettings = {
                 fontSize: 14,
                 //fontFamily: "Cascadia Code, Fira Code, Consolas, 'Courier New', monospace",
                 fontFamily: 'Consolas, "Courier New", monospace',
-                fontLigatures: false,
+                // fontLigatures: false,
                 colorDecorators: true,
                 dragAndDrop: true,
                 linkedEditing: true,
-                minimap: { enabled: false },
+                // minimap: { enabled: false },
                 mouseWheelZoom: true,
                 showFoldingControls: 'always',
                 useTabStops: true,
@@ -879,7 +892,7 @@ const nrsettings = {
     //debugUseColors: true,
 
     /** The maximum length, in characters, of any message sent to the debug sidebar tab, default=1000 */
-    debugMaxLength: 2048, // default: 1000
+    debugMaxLength: 2048,
 
     /** Maximum buffer size for the exec node. Defaults to 10Mb */
     //execMaxBufferSize: 10000000,
@@ -934,15 +947,17 @@ const nrsettings = {
      * 
      * @return {boolean} The function should return true if the connection should be accepted, false otherwise.
      */
-    webSocketNodeVerifyClient: function(info /* , callback */) {
-        console.log('WEBSOKCETNODEVERIFYCLIENT: ', info)
-        return true
-    },
+    // webSocketNodeVerifyClient: function(info /* , callback */) {
+    //     console.log('webSocketNodeVerifyClient: ', info)
+    //     return true
+    // },
     
-
     //#endregion ---- Specific Node Settings ---- //
 
 } // ---- End of exports ---- //
+
+// In case we want to use VScode to debug our node-red installation
+// debugger
 
 /** Splitting the export this way allows us to dynamically override settings if we want to */
 nrsettings.functionGlobalContext._port = nrsettings.uiPort

@@ -1,7 +1,7 @@
 {
   "name": "node-red-master",
   "version": "3.0.2",
-  "description": "Test environment for developing Node-RED flows",
+  "description": "Test environment for developing Node-RED flows - Parent/Master Folder",
   "main": "node_modules/node-red/red.js",
   "keywords": [
     "node-red"
@@ -25,7 +25,7 @@
     "log": "sudo journalctl -u node-red -f -n 0 -o cat",
 
     "adminui": "start http://localhost:1880/red/",
-    "ui": "start http://localhost:1880/ui/",
+    "ui": "start http://localhost:1880/ui/"
   },
 
   "dependencies": {
@@ -33,7 +33,7 @@
     "node-red-admin": "*"
   },
 
-  "engines" : { "node" : ">=14" },
+  "engines" : { "node" : ">=14.14" },
   "browserslist": [
     "> 0.5%",
     "maintained node versions",
