@@ -1,6 +1,6 @@
 {
   "name": "alternate-node-red-installer",
-  "version": "4.0.0",
+  "version": "3.0.2",
   "description": "An alternative installer for Node-RED. Avoids global installs, no admin rights required.",
   "scripts": {
     "patch": "npm version patch -m \"Patch version bump to %s\" ",
@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/TotallyInformation/alternate-node-red-installer#readme",
   "engines": {
-    "node": ">=14"
+    "node": ">=14.14"
   },
   "browserslist": [
     "> 0.5%",

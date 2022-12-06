@@ -30,7 +30,7 @@
 
   "dependencies": {},
 
-  "engines" : { "node" : ">=14" },
+  "engines" : { "node" : ">=14.14" },
   "browserslist": [
       "> 0.5%",
       "maintained node versions",
