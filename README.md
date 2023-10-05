@@ -43,7 +43,7 @@ These instructions should work on any platform supported by Node.JS.
   * [Introduction](#introduction)
   * [The issue](#the-issue)
   * [The solution](#the-solution)
-  * [The advamtages](#the-advamtages)
+  * [The advantages](#the-advantages)
   * [Starting Node-RED](#starting-node-red)
   * [Updating Node-RED and installed nodes](#updating-node-red-and-installed-nodes)
   * [Changes](#changes)
@@ -92,7 +92,7 @@ Have different versions of Node-RED running in parallel. All really easy.
 
 This works on any platform that Node-RED will run on.
 
-## The advamtages
+## The advantages
 
 The advantages of this approach I believe are:
 
