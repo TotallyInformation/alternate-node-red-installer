@@ -1,33 +1,40 @@
-# alternate-node-red-installer
-An alternative installer for Node-RED. Avoids global installs, no admin rights required for new Node-RED instances.
+# @totallyinformation/nrinstall
+
+An alternative installer for Node-RED. Avoids global installs, no admin rights required for new Node-RED instances. Local install allows full control and even multiple different versions of Node-RED running in parallel. Works on any platform supported by Node.JS. It also includes an enhanced settings.js example file and some additional utility scripts.
 
 > This solution is particularly suited for development environments and anywhere that you don't want to install global NodeJS scripts. Also when you need to have different versions of Node-RED running in parallel.
+
+> [!NOTE]
+> That the npm package name for this repository has changed from [`alternate-node-red-installer`](https://www.npmjs.com/package/alternate-node-red-installer) to [`@totallyinformation/nrinstall`](https://www.npmjs.com/package/@totallyinformation/nrinstall) to allow easier running from `npx`. The old published package has now be deprecated.
 
 ## Getting Started
 
 1. Make sure that you have Node.JS correctly installed. Check that you can run it manually from the command line with `node --version && npm --version`.
-2. Make sure that Node.js is at least at version 8.16.0 (LTS) or above.
-3. For ease of use, install this package globally with `npm install -g alternate-node-red-installer`. You may need to use a command line with elevated rights (`sudo` on Linux).
+2. Make sure that Node.js is at least at version 20 (LTS) or above.
+3. Run the installer directly with npx:
+   
+   ```
+   npx @totallyinformation/nrinstall -f <root folder name>
+   ```
+   
+    Where <root folder name>` is a relative or absolute folder path that you want to be the root of your new Node-RED installation.
 
-Now, from any command line, you should be able to run the following:
+4. Optional: install globally with `npm install -g @totallyinformation/nrinstall`. You may need to use a command line with elevated rights (`sudo` on Linux). Then run as:
 
-```
-alternate-node-red-installer -f <root folder name>
-```
-
-Where <root folder name>` is a relative or absolute folder path that you want to be the root of your new Node-RED installation.
-
-Instead of the long-winded executable name, you can also use `nrinstall`
+   ```
+   nrinstall -f <root folder name>
+   ```
 
 Example (for Mac, Linux or Windows PowerShell):
 
 ```
+mkdir ~/nrtest
 nrinstall -f ~/nrtest
 ```
 
 Once the install has completed (it may take some time), you can navigate to the data sub-folder and work with Node-RED as normal (e.g. `cd ~/nrtest/data`).
 
-You may wish to adjust the `settings.js` file and install any required Nodes at this point.
+You may wish to adjust the `./data/settings.js` file. See the `./data/example-settings.js` file for an example enhanced settings file.
 
 Run `npm run` to see the run commands available for your convenience. They are detailed in the README.md file installed in the data subfolder.
 
@@ -37,18 +44,20 @@ These instructions should work on any platform supported by Node.JS.
 
 <!-- TOC -->
 
-* [alternate-node-red-installer](#alternate-node-red-installer)
-  * [Getting Started](#getting-started)
-  * [Table of Contents](#table-of-contents)
-  * [Introduction](#introduction)
-  * [The issue](#the-issue)
-  * [The solution](#the-solution)
-  * [The advamtages](#the-advamtages)
-  * [Starting Node-RED](#starting-node-red)
-  * [Updating Node-RED and installed nodes](#updating-node-red-and-installed-nodes)
-  * [Changes](#changes)
-  * [To Do](#to-do)
-  * [Prerequisites](#prerequisites)
+- [@totallyinformation/nrinstall](#totallyinformationnrinstall)
+  - [Getting Started](#getting-started)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [The issue](#the-issue)
+  - [The solution](#the-solution)
+  - [The advamtages](#the-advamtages)
+  - [Starting Node-RED](#starting-node-red)
+  - [Updating Node-RED and installed nodes](#updating-node-red-and-installed-nodes)
+  - [Changes](#changes)
+  - [To Do](#to-do)
+  - [Prerequisites](#prerequisites)
+  - [Sponsorship](#sponsorship)
+  - [Other links](#other-links)
 
 <!-- /TOC -->
 
@@ -142,4 +151,40 @@ Please see the [TODO](./TODO.md) file.
 
 ## Prerequisites
 
-* NodeJS. v10 is the minimum supported version.
+* NodeJS. v20 is the minimum supported version.
+
+## Sponsorship
+
+If you find value in my work, please consider a small sponsorship or other contribution to help me continue to provide free, open source software.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3PPMRJ)
+
+[GitHub Sponsorship](https://github.com/sponsors/TotallyInformation), 
+[PayPal Sponsorship](https://paypal.me/TotallyInformation),
+[Patreon Sponsorship](https://patreon.com/TotallyInformation?utm_medium=github&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink)
+
+## Other links
+
+Here are some other links to my work that you may find interesting:
+
+- ![uib](https://github.com/TotallyInformation/node-red-contrib-uibuilder/raw/main/front-end/images/node-blue.ico) [UIBUILDER for Node-RED](https://github.com/TotallyInformation/node-red-contrib-uibuilder)
+  - ❓ [Ideas, questions & general help](https://discourse.nodered.org/tag/node-red-contrib-uibuilder) - Ask your question on the Node-RED forum using the node-red-contrib-uibuilder tag.
+  - 📁 [Documentation](https://totallyinformation.github.io/node-red-contrib-uibuilder) - Go to the latest documentation.
+  - 🧑‍💻 [Flows](https://flows.nodered.org/search?term=uibuilder) - Example flows, nodes and collections related to UIBUILDER.
+  - ℹ️ [WIKI](https://github.com/TotallyInformation/node-red-contrib-uibuilder/wiki) - More documentation and examples.
+  - 📂 [Example Svelte External Template](https://github.com/TotallyInformation/uib-template-svelte-simple) - In case you want to build your own svelte app.
+  - 📂 [Example Simple External Template](https://github.com/TotallyInformation/uib-template-test) - In case you want to build your own external template.
+  - 📊 [uPlot UIBUILDER extension](https://github.com/TotallyInformation/nr-uibuilder-uplot) - Useful charts but also demonstrates how to build your own extension.
+
+- 🧪 [Web Components Library](https://github.com/TotallyInformation/web-components) - A growing library of useful HTML Web Components. Useable with or without Node-RED & UIBUILDER. Some having specific enhancements for Node-RED but will still work well stand-alone. These now have their own dedicated documentation, demo and test website at https://wc.totallyinformation.net. Please check them out there.
+
+- 🔨 [ui library module used by UIBUILDER](https://github.com/TotallyInformation/ui.js) - Can be used stand-alone for turning UI standard config JSON into HTML.
+
+- 🕜 [node-red-contrib-moment](https://github.com/TotallyInformation/node-red-contrib-moment) - Nodes to make use of the MomentJS date/time handling library in Node-RED.
+
+- 🧪 [Testbed for Node-RED custom nodes](https://github.com/TotallyInformation/Node-RED-Testbed) - Embodying more up-to-date thinking than the test nodes, a blank playground.
+- 🧪 [Test Nodes for Node-RED](https://github.com/TotallyInformation/uib-template-test) - Some test nodes for Node-RED that help you understand how everything works.
+
+- 🚤 [HotNipi Gauge Web Component](https://github.com/TotallyInformation/gauge-hotnipi) - A really nice looking gauge component. Works with Node-RED, UIBUILDER, or stand-alone.
+
+- 🧪 [Array Grouper](https://github.com/TotallyInformation/groupit) - Stand-alone function to reshape an array of objects.

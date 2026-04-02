@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-'use strict'
 // @ts-nocheck
+
 
 /**
  * Install the Node-RED alternate installation template
@@ -22,32 +22,38 @@
  * -- Job Done! --
  */
 
-const chalk = require('chalk')
-const boxen = require('boxen')
-const yargs = require('yargs')
-const fs = require('fs-extra')
-const path = require('path')
-//const exec = require('child_process').exec
-const util = require('util');
-const exec = util.promisify(require('child_process').exec)
-const tilib = require('../tilib')
-const ora = require('ora') // console spinner
-const replace = require('replace-in-file')
+import chalk from 'chalk'
+import chalkTemplate from 'chalk-template'
+import boxen from 'boxen'
+import yargs from 'yargs/yargs'
+import { hideBin } from 'yargs/helpers'
+import fs from 'fs-extra'
+import path from 'node:path'
+import util from 'node:util'
+import { exec as execCb } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+import tilib from '../tilib.js'
+import ora from 'ora' // console spinner
+import { replaceInFile } from 'replace-in-file'
 
 /** Parameters from command line
  * @type {Object} options
  * @property {string} [folder] - Root folder that will contain the Node-RED installation.
  * @property {boolean} [no-color] - Turn off ANSI color output.
  */
-const options = yargs
-    .usage('Usage: -f <root-folder-name>')
+const options = yargs(hideBin(process.argv))
+    .usage('Usage: npx @totallyinformation/nrinstall -f <root-folder-name>\n  or if installed globally: nrinstall -f <root-folder-name>')
     .option('f', {
         alias: 'folder', describe: 'Root folder, Node-RED will be installed here', type: 'string', demandOption: true
     })
     .option('no-color', {
         describe: 'Turn off ANSI color output', type: 'boolean', demandOption: false
     })
-    .argv
+    .parse()
+
+const exec = util.promisify(execCb)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const boxenOptions = {
     padding: 1,
@@ -69,7 +75,7 @@ spinner.color = 'yellow'
 const folder = path.resolve(options.folder)
 const templatesFolder = path.join(__dirname, '..', 'templates')
 
-var msg = chalk`{cyan.bold.underline Alternate Installer for Node-RED}
+var msg = chalkTemplate`{cyan.bold.underline Alternate Installer for Node-RED}
 
 {white Root Folder . . :} {green.bold.underline ${folder}}
 {white Templates Folder:} {green.bold.underline ${templatesFolder}}
@@ -84,11 +90,11 @@ async function installer(pkgFolder, folder='') {
     /** npm commands behave dreadfully. Many will error out even though they actually succeed. */
     console.log({folder})
     try{
-        const { stdout, stderr } = await exec('npm install --production --unsafe-perm', {'cwd': folder})
+        const { stdout, stderr } = await exec('npm install --omit=dev', {'cwd': folder})
         out.stdout = stdout
         out.stderr = stderr
     } catch(err) {
-        //msg += chalk`\n{red CMD ERROR}\n`
+        //msg += chalkTemplate`\n{red CMD ERROR}\n`
         //console.log(err)
         out.stdout = err.stdout
         out.stderr = err.stderr
@@ -97,9 +103,9 @@ async function installer(pkgFolder, folder='') {
             pkgFolder = tilib.findPackage('node-red', folder)
             if ( pkgFolder !== null ) {
                 const nrPkg = tilib.readPackageJson(pkgFolder) || {'version':'N/A'}
-                msg += chalk`{green Node-RED v{bold ${nrPkg.version}} successfully installed}\n`
+                msg += chalkTemplate`{green Node-RED v{bold ${nrPkg.version}} successfully installed}\n`
             } else {
-                msg += chalk`{red.bold Node-RED failed to install}\n`
+                msg += chalkTemplate`{red.bold Node-RED failed to install}\n`
             }
         }
     }
@@ -119,9 +125,9 @@ async function copyDataTemplate(pkgFolder, folder) {
                 'errorOnExist': true,
             }
         )
-        msg += chalk`{green Copied template data (userDir) folder to ${fldrData}}\n`
+        msg += chalkTemplate`{green Copied template data (userDir) folder to ${fldrData}}\n`
     } catch(err) {
-        msg += chalk`{red.bold Data (userDir) folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${fldrData}}\n`
+        msg += chalkTemplate`{red.bold Data (userDir) folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${fldrData}}\n`
         return
     }
 
@@ -131,10 +137,10 @@ async function copyDataTemplate(pkgFolder, folder) {
         to: folder,
     }
     try {
-        const results = await replace(fileReplaceOpts)
+        const results = await replaceInFile(fileReplaceOpts)
         console.log(`Replaced "<root-folder-name>" with ${folder}`, results)
     } catch (error) {
-        console.error(`FAILED to Replace "<root-folder-name>" with ${folder} - change manually before use`, error)
+        console.error(`FAILED to Replace "<root-folder-name>" with ${folder} - change manually before use. `, error)
     }
 }
 
@@ -149,9 +155,9 @@ async function copyMasterTemplate(pkgFolder, folder) {
                 'errorOnExist': true,
             }
         )
-        msg += chalk`{green Copied template master folder from templates to root folder: ${folder}}\n`
+        msg += chalkTemplate`{green Copied template master folder from templates to root folder: ${folder}}\n`
     } catch(err) {
-        msg += chalk`{red.bold Root folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${folder}}\n`
+        msg += chalkTemplate`{red.bold Root folder already exists or cannot be created - NOT COPIED - Please use a folder name that does not exist. ${folder}}\n`
         return
     }
 
@@ -161,10 +167,10 @@ async function copyMasterTemplate(pkgFolder, folder) {
         to: folder,
     }
     try {
-        const results = await replace(fileReplaceOpts)
+        const results = await replaceInFile(fileReplaceOpts)
         console.log(`Replaced "<root-folder-name>" with ${folder}`, results)
     } catch (error) {
-        console.error(`FAILED to Replace "<root-folder-name>" with ${folder} - change manually before use`, error)
+        console.error(`FAILED to Replace "<root-folder-name>" with ${folder} - change manually before use. `, error)
     }
 }
 
@@ -178,7 +184,7 @@ async function copySettings(pkgFolder, folder) {
 
     if (pkgFolder === null) pkgFolder = tilib.findPackage('node-red', folder)
     if ( pkgFolder !== null ) {
-        //msg += chalk`{blue \nNode-RED package folder found: ${pkgFolder}\n}`
+        //msg += chalkTemplate`{blue \nNode-RED package folder found: ${pkgFolder}\n}`
 
         try {
             await fs.copy(
@@ -189,13 +195,13 @@ async function copySettings(pkgFolder, folder) {
                     'errorOnExist': true,
                 }
             )
-            msg += chalk`{green Copied master settings.js}\n`
-            msg += 'Check `example-settings.js` if you want an enhanced settings file.\n'
+            msg += chalkTemplate`{green Copied template settings.js to data folder: ${userDirSettings}}\n`
+            msg += 'Check `data/example-settings.js` if you want an enhanced settings file.\n'
         } catch(err) {
-            msg += chalk`{red.bold Master settings.js already exists - NOT COPIED}\n`
+            msg += chalkTemplate`{red.bold Master \`data/settings.js\` already exists - template NOT COPIED}\n`
         }
     } else {
-        msg += chalk`\n{bgRed.bold.yellow  Node-RED package folder not found }\n`
+        msg += chalkTemplate`\n{bgRed.bold.yellow  Node-RED package folder not found }\n`
     }
 
 }
@@ -228,9 +234,9 @@ main(pkgFolder, folder)
     .then( () => {
         spinner.stop()
 
-        console.log(chalk`{cyan.bold NPM COMMAND OUTPUT}`)
+        console.log(chalkTemplate`{cyan.bold NPM COMMAND OUTPUT}`)
         console.log(out.stdout)
-        console.log(chalk`{magenta.bold NPM COMMAND ERROR OUTPUT}`)
+        console.log(chalkTemplate`{magenta.bold NPM COMMAND ERROR OUTPUT}`)
         console.log(out.stderr)
     })
     .catch( (err) => { // belt & braces

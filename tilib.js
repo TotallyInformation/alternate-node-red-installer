@@ -16,13 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-// @ts-check
-'use strict'
+// @ts-nocheck
 
-const path = require('path')
-const fs = require('fs-extra')
+import path from 'node:path'
+import fs from 'fs-extra'
+import { createRequire } from 'node:module'
 
-module.exports = {
+const require = createRequire(import.meta.url)
+
+const tilib = {
     /** Remove leading/trailing slashes from a string
      * @param {string} str
      * @returns {string}
@@ -237,4 +239,6 @@ module.exports = {
         return true
     }, // ----  ---- //
     
-} // ---- End of module.exports ---- //
+} // ---- End of tilib ---- //
+
+export default tilib

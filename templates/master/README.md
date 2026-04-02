@@ -7,14 +7,14 @@ as a locally installed package. It contains an npm package.json file that will i
 
 1. Make sure that you have Node.JS correctly installed. Check that you can run it manually from the command line with `node --version && npm --version`.
 2. Make sure that Node.js is at least at version 8.16.0 (LTS) or above.
-3. For ease of use, install this package globally with `npm install -g alternate-node-red-installer`. You may need to use a command line with elevated rights (`sudo` on Linux).
+3. For ease of use, install this package globally with `npm install -g @totallyinformation/nrinstall`. You may need to use a command line with elevated rights (`sudo` on Linux).
 
-> NB: You can use `nrinstall` as a command shortcut for `alternate-node-red-installer` 😁
+> NB: The command is `nrinstall`.
 
 Now, from any command line, you should be able to run the following:
 
 ```
-alternate-node-red-installer -f <root folder name>
+nrinstall -f <root folder name>
 ```
 
 Where <root folder name>` is a relative or absolute folder path that you want to be the root of your new Node-RED installation.
@@ -22,7 +22,7 @@ Where <root folder name>` is a relative or absolute folder path that you want to
 Example (for Mac, Linux or Windows PowerShell):
 
 ```
-alternate-node-red-installer -f ~/nrtest
+nrinstall -f ~/nrtest
 ```
 
 Once the install has completed (it may take some time), you can navigate to the data sub-folder and work with Node-RED as normal (e.g. `cd ~/nrtest/data`).

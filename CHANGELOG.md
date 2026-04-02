@@ -1,14 +1,32 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## 5.0.0
 
-alternate-node-red-installer adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+[Code commits since last release](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v3.0.2...v5.0.0).
 
-## [Unreleased](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v2.0.2...master)
+### Breaking changes
 
-None
+Node.js v20 is now the minimum supported version.
 
-## [3.0.2](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v3.0.0...v4.0.0)
+The npm package name has changed from alternate-node-red-installer to @totallyinformation/nrinstall to allow easier running from `npx`. The old published package has now be deprecated.
+
+### Other changes
+
+* **MAJOR**: You can now run the installer directly with npx without installing globally: `npx @totallyinformation/nrinstall -f <root folder name>`.
+* **MAJOR**: The command line command is now `nrinstall` (if you install globally) or `npx @totallyinformation/nrinstall` (if you don't install globally).
+* Dependencies updated.
+* **MAJOR**: Changed name from alternate-node-red-installer to @totallyinformation/nrinstall to allow easier running from `npx`.
+* **MAJOR**: Updated the template example-settings.js file to be current with at least v4.1.8 of Node-RED.
+* Changed to ESM modules.
+* Updated the dependencies to the latest versions.
+
+## [4.0.0](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v3.0.2...v4.0.0)
+
+**Node.js v18** is now the minimum version supported.
+
+Dependencies updated as far as possible. Some dependencies are ESM only in their latest versions which will require significant rework.
+
+## [3.0.2](https://github.com/TotallyInformation/alternate-node-red-installer/compare/v3.0.0...v3.0.2)
 
 **WARNING**: Although this has the same major version number as the previous release, it is a breaking release. This is to allow the major versions to be aligned to Node-RED itself.
 
@@ -17,12 +35,12 @@ None
 * Minimum version of Node.js supported is now v14 in alignment with Node-RED v3.
 * Update to node-red v3.0.2 as minimum - the latest version of node-red will always be installed when `nrinstall` is run.
 
-## Fixed
+### Fixed
 
 * Changes to the systemd service file - removing spurious quote characters.
 * Changes to the `data/envfile.ini` file - removing spurious quote characters.
 
-## Changed
+### Changed
 
 * Update `example-settings.js` to a newer version - aligned to node-red v3.0.2 with enhancements & additional help
 * Removed `.eslintrc.js`/`.eslintrc.json` - not required

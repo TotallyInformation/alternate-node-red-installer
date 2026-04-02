@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict'
+// @ts-nocheck
 
 /**
  * Install the Node-RED alternate installation template
@@ -18,12 +18,14 @@
  * -- Job Done! --
  */
 
-const fs = require('fs')
-const https = require('https')
+import fs from 'node:fs'
+import https from 'node:https'
 // const path = require('path')
 // const os = require('os')
 // const child_process = require('child_process')
 // const readline = require('readline')
+
+console.log('running install')
 
 function download(url, dest, cb) {
     const file = fs.createWriteStream(dest)
@@ -45,7 +47,7 @@ console.warn('  Please see the README.md file for manual installation.\n')
 // https://github.com/TotallyInformation/alternate-node-red-installer/archive/master.zip
 const dest  = './alternate-node-red-installer.zip'
 const url = 'https://codeload.github.com/TotallyInformation/alternate-node-red-installer/zip/master'
-download(url, dest, function(){
+download(url, dest, function() {
     console.log('done?')
 })
 // Unpack

@@ -1,4 +1,4 @@
-# Alternate Node-RED Installer: To Do
+# Alternate Node-RED Installer: To Do (Maybe)
 
 https://discourse.nodered.org/t/advice-setting-up-node-red-for-a-class/16650
 
